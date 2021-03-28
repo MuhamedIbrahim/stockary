@@ -1,0 +1,71 @@
+.header_favs {
+  position: relative;
+}
+
+@media (max-width: 992px) {
+  .header_favs {
+    display: none;
+  }
+}
+
+.header_favs__icon {
+  position: relative;
+}
+
+.header_favs__icon_point {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  top: -1px;
+  right: -1px;
+}
+
+.header_favs__menu {
+  position: absolute;
+  width: 350px;
+  top: calc(100% + 10px);
+  right: 0;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  border-radius: 20px;
+  display: none;
+}
+
+.header_favs__menu--active {
+  display: block;
+}
+
+.header_favs__menu::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 5px solid #fff;
+  position: absolute;
+  bottom: 100%;
+  right: 15px;
+}
+
+.header_favs__menu_empty {
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+}
+
+.header_favs__menu_title {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.header_favs__view_all {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.header_favs__view_all a {
+  font-weight: 500;
+  font-size: 12px;
+}

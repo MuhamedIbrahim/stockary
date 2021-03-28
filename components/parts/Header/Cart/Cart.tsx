@@ -1,0 +1,147 @@
+import { Button, IconButton } from "@/components/UI/Button/Button";
+import { Arrow, Basket, BasketFilled } from "@/styles/icons";
+import { colors } from "@/styles/theme";
+import fetcher from "@/utils/fetcher/cartFetcher";
+import swrOptions from "@/utils/fetcher/options";
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
+import useSWR from "swr";
+import Product from "../Favs/Product/Product";
+import styles from "./Cart.module.css";
+
+const Cart = () => {
+  const [mobileDeviceOn, setMobileDeviceOn] = useState(true);
+
+  const cartMenuRef = useRef(null);
+
+  const { data: cartProducts = [] } = useSWR(
+    !mobileDeviceOn && "cart",
+    fetcher,
+    swrOptions
+  );
+
+  const toggleCartMenuHandler = useCallback(() => {
+    cartMenuRef?.current?.classList.contains(
+      styles["header_cart__menu--active"]
+    )
+      ? cartMenuRef.current.classList.remove(
+          styles["header_cart__menu--active"]
+        )
+      : cartMenuRef.current.classList.add(styles["header_cart__menu--active"]);
+  }, []);
+
+  const closeCartMenuHandler = useCallback((e) => {
+    if (
+      !e.target.closest("#header_cart__menu_container") ||
+      e.target.closest("#header_cart__menu_close")
+    ) {
+      cartMenuRef.current.classList.contains(
+        styles["header_cart__menu--active"]
+      ) &&
+        cartMenuRef.current.classList.remove(
+          styles["header_cart__menu--active"]
+        );
+    }
+  }, []);
+
+  useEffect(() => {
+    window.innerWidth > 993 && setMobileDeviceOn(false);
+  }, []);
+
+  return (
+    <div className={styles.header_cart}>
+      <div className={styles.header_cart__icon}>
+        <IconButton
+          size="lg"
+          bgColor={colors.white[90]}
+          borderColor="transparent"
+          name="Cart"
+          ml="15px"
+          onClick={toggleCartMenuHandler}
+          link={mobileDeviceOn}
+          href="/cart"
+        >
+          {cartProducts?.length > 0 ? (
+            <BasketFilled fill={colors.white[100]} width="20" height="20" />
+          ) : (
+            <Basket fill={colors.white[100]} width="20" height="20" />
+          )}
+        </IconButton>
+        {cartProducts?.length > 0 && (
+          <span
+            style={{ backgroundColor: colors.red[90] }}
+            className={styles.header_cart__icon_point}
+          ></span>
+        )}
+      </div>
+      <div
+        ref={cartMenuRef}
+        className={styles.header_cart__menu}
+        onClick={closeCartMenuHandler}
+      >
+        <div
+          className={styles.header_cart__menu_container}
+          id="header_cart__menu_container"
+          style={{ backgroundColor: colors.white[100] }}
+        >
+          <Button
+            id="header_cart__menu_close"
+            size="xs"
+            bgColor="transparent"
+            onClick={closeCartMenuHandler}
+          >
+            <Arrow width="15" height="8" fill={colors.black[100]} dir="-180" />
+            Back
+          </Button>
+          <h4
+            className={styles.header_cart__menu_title}
+            style={{ color: colors.black[100] }}
+          >
+            Your Cart{" "}
+            <sup style={{ color: colors.black[60] }}>
+              ({cartProducts?.length})
+            </sup>
+          </h4>
+          <div className={styles.header_cart__menu_content}>
+            {cartProducts?.length === 0 ? (
+              <div className={styles.header_cart__menu_empty}>
+                <div
+                  className={styles.header_cart__menu_empty_icon}
+                  style={{ backgroundColor: colors.cyan[70] }}
+                >
+                  <Basket width="30" height="30" fill={colors.cyan[90]} />
+                </div>
+                <p style={{ color: colors.black[80] }}>Your cart is empty.</p>
+              </div>
+            ) : (
+              <>
+                <div className={styles.header_cart__menu_products}>
+                  {cartProducts
+                    ?.filter((_, index) => index < 5)
+                    ?.map(({ id, title, image, productID, price }) => (
+                      <Product
+                        key={id}
+                        product={{ title, image, productID, price }}
+                      />
+                    ))}
+                </div>
+                {cartProducts?.length > 5 && (
+                  <div className={styles.header_cart__view_all}>
+                    <Link href="#">
+                      <a>
+                        View All{" "}
+                        <Arrow width="15" height="8" fill={colors.black[100]} />
+                      </a>
+                    </Link>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Cart;

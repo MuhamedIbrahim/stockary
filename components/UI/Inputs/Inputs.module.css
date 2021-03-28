@@ -1,0 +1,28 @@
+.input {
+  outline: none;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-family: inherit;
+  font-weight: 500;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 3px #bae0e440;
+}
+
+.input_search {
+  position: relative;
+}
+
+.input--search {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.input_search button {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+}

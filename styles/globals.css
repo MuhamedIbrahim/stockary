@@ -1,0 +1,47 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+svg {
+  vertical-align: middle;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: auto;
+}
+
+::placeholder {
+  color: #969696;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: #969696;
+}
+
+::-ms-input-placeholder {
+  color: #969696;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
