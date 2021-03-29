@@ -34,11 +34,11 @@ const Favs = React.memo(() => {
         localStorage.getItem("stockaryFavProds") || "[]"
       );
       setFavProducts(favProductsCached);
-      document.addEventListener("click", closeFavMenuHandler);
-      return () => {
-        document.removeEventListener("click", closeFavMenuHandler);
-      };
     }
+    document.addEventListener("click", closeFavMenuHandler);
+    return () => {
+      document.removeEventListener("click", closeFavMenuHandler);
+    };
   }, []);
 
   return (
