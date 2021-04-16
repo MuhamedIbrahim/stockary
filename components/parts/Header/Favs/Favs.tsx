@@ -94,7 +94,7 @@ const Favs = () => {
             </p>
             <div className={styles.header_favs__menu_products}>
               {favProducts
-                .filter((_, index) => index < 4)
+                ?.filter((_, index) => index < 4)
                 .map((product) => (
                   <Product
                     key={product.id}
