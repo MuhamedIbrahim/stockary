@@ -20,6 +20,8 @@ const Favs = () => {
     options
   );
 
+  console.log(favProducts);
+
   const toggleFavMenuHandler = useCallback(() => {
     favMenuRef?.current?.classList.contains(styles["header_favs__menu--active"])
       ? favMenuRef.current.classList.remove(styles["header_favs__menu--active"])

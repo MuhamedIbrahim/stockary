@@ -1,7 +1,11 @@
-const fetcher = (key: string) => {
-    return JSON.parse(
-      localStorage.getItem("stockaryFavProds")) || "[]"
-    ;
+import { arrayOfSimpleProductsReturn } from "../dataTypes";
+
+const fetcher = (key: string): arrayOfSimpleProductsReturn => {
+  if(localStorage.getItem("stockaryFavProds")) {
+    return JSON.parse(localStorage.getItem("stockaryFavProds"));
+  } else {
+    return [];
+  }
 }
 
 export default fetcher;
