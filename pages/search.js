@@ -5,7 +5,7 @@ const index = () => {
   const { query: routerQuery } = useRouter();
   return (
     <>
-      <h1>Search: {routerQuery.s}</h1>
+      <h1>Search query: {routerQuery.s}</h1>
     </>
   );
 };
