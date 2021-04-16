@@ -32,14 +32,16 @@ const fetcher = async (...[key, filter]: productsFetcherParams): Promise<product
       price = filter.price;
     }
 
-    let fetchRef = db.collection("products");
+    let fetchRef;
 
-    if(cat.length > 0) {
-      fetchRef = fetchRef.where('categoryID', 'in', cat);
-    }
-    
-    if(cond.length > 0) {
-      fetchRef = fetchRef.where("condition", 'array-contains-any', cond);
+    if(cat.length > 0 && cond.length > 0) {
+      fetchRef = db.collection("products").where('categoryID', 'in', cat).where("condition", 'array-contains-any', cond);
+    } else if (cat.length > 0) {
+      fetchRef = db.collection("products").where('categoryID', 'in', cat);
+    } else if (cond.length > 0) {
+      fetchRef = db.collection("products").where("condition", 'array-contains-any', cond);
+    } else {
+      fetchRef = db.collection("products").orderBy("purchases", "desc");
     }
     
     await fetchRef

@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import cartFetcher, { addProductCart } from "@/utils/fetcher/cartFetcher";
 import Badge from "@/components/UI/Badge/Badge";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
+import { SimpleProduct } from "@/utils/dataTypes";
 
 const SidebarBox = styled.div`
   border-radius: 15px;
@@ -78,7 +79,7 @@ const SingleProductPage = ({ product }) => {
   useEffect(() => {
     let flag = false;
     cartProducts.forEach((prod) => {
-      if (prod.productID === router.query.id) flag = true;
+      if ((prod as SimpleProduct).productID === router.query.id) flag = true;
     });
     if (flag) {
       setIsAddedToCart(true);
@@ -105,7 +106,7 @@ const SingleProductPage = ({ product }) => {
   const onAddToCartHandler = useCallback(async () => {
     let flag = false;
     cartProducts.forEach((prod) => {
-      if (prod.productID === router.query.id) flag = true;
+      if ((prod as SimpleProduct).productID === router.query.id) flag = true;
     });
 
     if (!flag) {

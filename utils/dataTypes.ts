@@ -7,11 +7,11 @@ type simpleProductData = {
   addedAt?: number
 }
 
-interface arrayOfSimpleProducts extends simpleProductData { 
+export interface SimpleProduct extends simpleProductData { 
   id: string
 };
 
-export type arrayOfSimpleProductsReturn = arrayOfSimpleProducts[] | [];
+export type arrayOfSimpleProductsReturn = SimpleProduct[] | [];
 
 export type simpleProductProps = {
   product: simpleProductData,
