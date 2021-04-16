@@ -51,15 +51,13 @@ const Cart = () => {
   }, []);
 
   const onRemoveProductHandler = useCallback((id) => {
-    mutateCartProducts(
-      async (currentCartProducts: arrayOfSimpleProductsReturn) => {
-        const updatedCartProducts = currentCartProducts?.filter(
-          (cartProd) => cartProd.id !== id
-        );
-        await removeProductCart(id);
-        return updatedCartProducts;
-      }
-    );
+    mutateCartProducts(async (currentCartProducts) => {
+      const updatedCartProducts = currentCartProducts.filter(
+        (cartProd) => cartProd.id !== id
+      );
+      await removeProductCart(id);
+      return updatedCartProducts;
+    });
   }, []);
 
   return (

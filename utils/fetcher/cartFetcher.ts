@@ -27,7 +27,7 @@ const fetcher = async (key: string): Promise<arrayOfSimpleProductsReturn> => {
     })
     .catch(error => error.message);
 
-    return Array.isArray(cartProducts) ? cartProducts : [];
+    return cartProducts ? cartProducts : [];
 };
 
 export default fetcher;
