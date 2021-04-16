@@ -8,6 +8,7 @@
   font-family: inherit;
   outline: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .button:disabled,
@@ -16,8 +17,13 @@
   cursor: default;
 }
 
-.button svg {
-  margin-right: 10px;
+.button svg,
+.button > div {
+  margin-right: 10px !important;
+}
+
+.button > div {
+  border-radius: 50%;
 }
 
 .button--xs {
@@ -25,7 +31,6 @@
   min-width: 30px;
   padding: 0;
   color: #1b1b1b;
-  font-weight: 500;
   font-size: 14px;
 }
 
@@ -45,6 +50,28 @@
   font-size: 14px;
 }
 
+.button--lg {
+  height: 50px;
+  min-width: 50px;
+  padding-right: 60px;
+  padding-left: 60px;
+  font-size: 15px;
+  border-radius: 15px;
+}
+
+.button--xl {
+  height: 50px;
+  min-width: 50px;
+  padding-right: 25px;
+  padding-left: 25px;
+  font-size: 15px;
+  border-radius: 15px;
+}
+
+.button--xl svg {
+  margin-left: 20px;
+}
+
 .icon_button {
   padding: 0;
 }
@@ -52,6 +79,11 @@
 .icon_button--lg {
   height: 40px;
   min-width: 40px;
+}
+
+.icon_button--md {
+  height: 30px;
+  min-width: 30px;
 }
 
 .icon_button--sm {

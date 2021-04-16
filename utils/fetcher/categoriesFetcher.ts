@@ -1,22 +1,45 @@
 import { db } from "@/lib/firebase";
 import { arrayOfCategoriesReturn } from "@/utils/dataTypes";
+import {popularCategories} from "stockary_config";
 
-const fetcher = async (key: string): Promise<arrayOfCategoriesReturn> => {
-    if(key === 'all') {
-        return await db
+const fetcher = async (...[key, returnType = ""]): Promise<arrayOfCategoriesReturn> => {
+    let catResponse = [];
+    if(key === 'categories/all') {
+        await db
         .collection("categories")
         .orderBy("products", "desc")
         .get()
         .then(snap => {
             const allDocs = [];
             snap.forEach(doc => allDocs.push(Object.assign({id: doc.id}, doc.data())))
-            return allDocs
+            if(returnType === 'filter') {
+                catResponse =  allDocs.map(doc => ({
+                    id: doc.id,
+                    value: doc.name,
+                    checked: false
+                }));
+            } else {
+                catResponse =  allDocs;
+            }
         })
-        .catch(error => error);
+        .catch(error => error.message);
+    } else if(key === 'categories/popular') {
+        await db
+        .collection("categories")
+        .where("productsNumber", ">", popularCategories)
+        .orderBy("productsNumber", "desc")
+        .limit(10)
+        .get()
+        .then(snap => {
+            const allDocs = [];
+            snap.forEach(doc => allDocs.push(Object.assign({id: doc.id}, doc.data())))
+            catResponse = allDocs
+        })
+        .catch(error => error.message);
     } else {
-        return await db
+        await db
           .collection("categories")
-          .doc(key)
+          .doc(key.split('categories/').join(''))
           .get()
           .then(doc => {
               if(doc.exists) {
@@ -25,8 +48,10 @@ const fetcher = async (key: string): Promise<arrayOfCategoriesReturn> => {
                   return {};
               }
             })
-          .catch(error => error);
+          .catch(error => error.message);
     }
+
+    return catResponse || [];
 };
 
 export default fetcher;

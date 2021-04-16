@@ -5,7 +5,6 @@ const index = () => {
   const { query: routerQuery } = useRouter();
   return (
     <>
-      <Header />
       <h1>Search: {routerQuery.s}</h1>
     </>
   );

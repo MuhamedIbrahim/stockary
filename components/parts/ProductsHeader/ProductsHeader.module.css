@@ -1,0 +1,21 @@
+.header__content,
+.header__show_style {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__content h1 {
+  font-size: 30px;
+  font-weight: 700;
+  padding-right: 30px;
+  margin: 0;
+}
+
+.header__show_style_active {
+  background-color: #e2f3f560 !important;
+}
+
+.header__show_style_active svg path {
+  stroke: #22d1ee !important;
+}

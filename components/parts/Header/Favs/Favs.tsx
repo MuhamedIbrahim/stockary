@@ -3,13 +3,22 @@ import { Arrow, Heart, HeartFilled } from "@/styles/icons";
 import { colors } from "@/styles/theme";
 import styles from "./Favs.module.css";
 import Product from "./Product/Product";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
+import useSWR from "swr";
+import fetcher, {
+  onUpdateFavProductsHandler,
+} from "@/utils/fetcher/favsFetcher";
+import options from "@/utils/fetcher/options";
 
-const Favs = React.memo(() => {
-  const [favProducts, setFavProducts] = useState([]);
-
+const Favs = () => {
   const favMenuRef = useRef(null);
+
+  const { data: favProducts = [], mutate: mutateFavProducts } = useSWR(
+    "favs",
+    fetcher,
+    options
+  );
 
   const toggleFavMenuHandler = useCallback(() => {
     favMenuRef?.current?.classList.contains(styles["header_favs__menu--active"])
@@ -28,13 +37,12 @@ const Favs = React.memo(() => {
     }
   }, []);
 
+  const onRemoveProductHandler = useCallback((id) => {
+    onUpdateFavProductsHandler({ id }, "remove", id);
+    mutateFavProducts();
+  }, []);
+
   useEffect(() => {
-    if (window.innerWidth < 993) {
-      const favProductsCached = JSON.parse(
-        localStorage.getItem("stockaryFavProds") || "[]"
-      );
-      setFavProducts(favProductsCached);
-    }
     document.addEventListener("click", closeFavMenuHandler);
     return () => {
       document.removeEventListener("click", closeFavMenuHandler);
@@ -51,13 +59,13 @@ const Favs = React.memo(() => {
           name="Favourites"
           onClick={toggleFavMenuHandler}
         >
-          {favProducts?.length > 0 ? (
+          {favProducts.length > 0 ? (
             <HeartFilled width="20" height="20" fill={colors.white[100]} />
           ) : (
             <Heart width="20" height="20" fill={colors.white[100]} />
           )}
         </IconButton>
-        {favProducts?.length > 0 && (
+        {favProducts.length > 0 && (
           <span
             style={{ backgroundColor: colors.red[90] }}
             className={styles.header_favs__icon_point}
@@ -69,7 +77,7 @@ const Favs = React.memo(() => {
         style={{ backgroundColor: colors.white[100] }}
         className={styles.header_favs__menu}
       >
-        {favProducts?.length === 0 ? (
+        {favProducts.length === 0 ? (
           <p
             className={styles.header_favs__menu_empty}
             style={{ color: colors.black[60] }}
@@ -78,25 +86,27 @@ const Favs = React.memo(() => {
           </p>
         ) : (
           <>
-            <h4
+            <p
               className={styles.header_favs__menu_title}
               style={{ color: colors.black[100] }}
             >
               Your Favourites
-            </h4>
+            </p>
             <div className={styles.header_favs__menu_products}>
               {favProducts
-                ?.filter((_, index) => index < 4)
-                .map(({ id, image, price, title, productID }) => (
+                .filter((_, index) => index < 4)
+                .map((product) => (
                   <Product
-                    key={id}
-                    product={{ image, price, title, productID }}
+                    key={product.id}
+                    product={product}
+                    mutationID={product.productID}
+                    onRemoved={onRemoveProductHandler}
                   />
                 ))}
             </div>
-            {favProducts?.length > 4 && (
+            {favProducts.length > 4 && (
               <div className={styles.header_favs__view_all}>
-                <Link href="#">
+                <Link href="/favourites">
                   <a>
                     View All{" "}
                     <Arrow width="15" height="8" fill={colors.black[100]} />
@@ -109,6 +119,6 @@ const Favs = React.memo(() => {
       </div>
     </div>
   );
-});
+};
 
 export default Favs;

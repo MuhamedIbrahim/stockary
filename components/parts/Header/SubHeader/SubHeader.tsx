@@ -1,4 +1,5 @@
 import { Button } from "@/components/UI/Button/Button";
+import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { MenuDots, Arrow, HeartFilled } from "@/styles/icons";
 import { colors } from "@/styles/theme";
 import fetcher from "@/utils/fetcher/categoriesFetcher";
@@ -10,7 +11,11 @@ import useSWR from "swr";
 import styles from "./SubHeader.module.css";
 
 const SubHeader = () => {
-  const { data: productsCategories = [] } = useSWR("all", fetcher, swrOptions);
+  const { data: productsCategories = [], isValidating: catsLoading } = useSWR(
+    ["categories/all"],
+    fetcher,
+    swrOptions
+  );
 
   const navMenuRef = useRef(null);
 
@@ -35,7 +40,7 @@ const SubHeader = () => {
 
   return (
     <div
-      className={styles.sub_header}
+      className={[styles.sub_header, "sub_header"].join(" ")}
       style={{ borderColor: colors.black[50] }}
     >
       <div className="container">
@@ -75,7 +80,7 @@ const SubHeader = () => {
                   key={category.id}
                   className={styles.sub_header__nav_product}
                 >
-                  <Link href={`/categories/${category.id}`}>
+                  <Link href={`/products?cat=${category.id}`}>
                     <a>
                       <div style={{ backgroundColor: colors.cyan[70] }}>
                         <Image
@@ -93,7 +98,7 @@ const SubHeader = () => {
                           {category.name}
                         </p>
                         <span style={{ color: colors.black[70] }}>
-                          {category.products.length} Products
+                          {category.productsNumber} Products
                         </span>
                       </div>
                     </a>
@@ -103,20 +108,34 @@ const SubHeader = () => {
             </div>
           </div>
         </div>
-        <ul style={{ color: colors.black[100] }}>
-          <li onClick={onToggleNavMenuHandler} style={{ cursor: "pointer" }}>
-            <MenuDots width="10" height="16" fill={colors.black[100]} />
-            All Categories
-          </li>
-          {productsCategories
-            ?.filter((_, index) => index < 7)
-            .map((category) => (
-              <li key={category.id}>
-                <Link href={`/categories/${category.id}`}>
-                  <a>{category.name}</a>
-                </Link>
+        <ul style={{ color: colors.black[90] }}>
+          {catsLoading ? (
+            <Skeleton
+              bgColor={colors.black[80]}
+              number={1}
+              height="17px"
+              width="100%"
+            />
+          ) : (
+            <>
+              <li
+                onClick={onToggleNavMenuHandler}
+                style={{ cursor: "pointer" }}
+              >
+                <MenuDots width="10" height="16" fill={colors.black[100]} />
+                All Categories
               </li>
-            ))}
+              {productsCategories
+                ?.filter((_, index) => index < 7)
+                .map((category) => (
+                  <li key={category.id}>
+                    <Link href={`/products?cat=${category.id}`}>
+                      <a>{category.name}</a>
+                    </Link>
+                  </li>
+                ))}
+            </>
+          )}
         </ul>
       </div>
     </div>

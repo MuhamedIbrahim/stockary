@@ -24,6 +24,7 @@
   background-color: rgba(0, 0, 0, 0.9);
   justify-content: flex-end;
   display: none;
+  z-index: 999;
 }
 
 .header_cart__menu--active {

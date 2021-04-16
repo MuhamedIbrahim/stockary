@@ -1,0 +1,40 @@
+.bottom_footer {
+  padding: 15px 0 5px;
+}
+
+.bottom_footer__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #c4c4c4;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.bottom_footer__content > div {
+  margin-bottom: 10px;
+}
+
+.bottom_footer__content ul {
+  display: flex;
+  align-items: center;
+}
+
+.bottom_footer__content ul li {
+  position: relative;
+}
+
+.bottom_footer__content ul li:not(:last-child) {
+  margin-right: 15px;
+  padding-right: 15px;
+}
+
+.bottom_footer__content ul li:not(:last-child)::after {
+  position: absolute;
+  content: "";
+  width: 1px;
+  height: 100%;
+  right: 0;
+  top: 0;
+  background-color: #182466;
+}

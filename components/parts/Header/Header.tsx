@@ -8,8 +8,15 @@ import Link from "next/link";
 import Cart from "./Cart/Cart";
 import SubHeader from "./SubHeader/SubHeader";
 import { useCallback, useRef } from "react";
+import Skeleton from "@/components/UI/Skeleton/Skeleton";
+import { useAuth } from "@/utils/useAuth";
+import { useRouter } from "next/router";
 
 const Header = () => {
+  const { user, isLoading, signout, signin } = useAuth();
+
+  const { reload, push } = useRouter();
+
   const navMenuRef = useRef(null);
 
   const onToggleNavMenuHandler = useCallback((e) => {
@@ -32,6 +39,21 @@ const Header = () => {
           styles["main_header__nav--active"]
         );
   }, []);
+
+  const onAuthHandler = useCallback(
+    async (type) => {
+      if (user && type !== "profile") {
+        await signout();
+        reload();
+      } else if (user && type === "profile") {
+        push("/profile");
+      } else {
+        await signin();
+        reload();
+      }
+    },
+    [user]
+  );
 
   return (
     <>
@@ -67,24 +89,32 @@ const Header = () => {
                 </Button>
                 <ul style={{ color: colors.black[90] }}>
                   <li>
-                    <Link href="#">
+                    <Link href="/">
                       <a>Home</a>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#">
+                    <Link href="/products">
                       <a>All Products</a>
                     </Link>
                   </li>
-                  <li>
-                    <Link href="#">
-                      <a>My Profile</a>
-                    </Link>
-                  </li>
+                  {user && (
+                    <li>
+                      <Link href="#">
+                        <a>My Profile</a>
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link href="#">
                       <a>Customer Service</a>
                     </Link>
+                  </li>
+                  <li
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onAuthHandler("sign")}
+                  >
+                    {user ? "Sign Out" : "Sign In"}
                   </li>
                 </ul>
               </div>
@@ -98,7 +128,7 @@ const Header = () => {
               >
                 <Menu height="18" width="18" fill={colors.white[100]} />
               </IconButton>
-              <Link href="#">
+              <Link href="/">
                 <a>
                   <Logo height="30" width="120" fill={colors.white[100]} />
                 </a>
@@ -106,21 +136,31 @@ const Header = () => {
             </div>
             <SearchField />
             <div className={styles.main_header__ctas}>
-              <Favs />
-              <Cart />
-              <Button
-                link={true}
-                size="sm"
-                bgColor={colors.blue[100]}
-                borderColor="transparent"
-                color={colors.white[100]}
-                ml="15px"
-                className={styles.main_header__cta_profile}
-                href="/user"
-              >
-                <User width="20" height="20" fill={colors.white[100]} /> My
-                Profile
-              </Button>
+              {isLoading && !user ? (
+                <Skeleton height="42px" width="240px" number={2} />
+              ) : (
+                <>
+                  <Favs />
+                  <Cart />
+                  <Button
+                    size="sm"
+                    bgColor={colors.blue[100]}
+                    borderColor="transparent"
+                    color={colors.white[100]}
+                    ml="15px"
+                    className={styles.main_header__cta_profile}
+                    onClick={() => onAuthHandler("profile")}
+                  >
+                    <User
+                      width="20"
+                      height="20"
+                      fill={colors.white[100]}
+                      userPhoto={user ? user?.photo : false}
+                    />{" "}
+                    My Profile
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

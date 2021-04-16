@@ -1,0 +1,49 @@
+.arrow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  height: 30px;
+}
+
+.arrow svg {
+  transition: fill 0.1s ease-in-out;
+}
+
+.arrow:after {
+  content: "";
+  right: 0;
+  top: 0;
+  position: absolute;
+  background-color: #e2f3f598;
+  height: 100%;
+  width: 15px;
+  z-index: -1;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.arrow_PREV {
+  right: 40px;
+  padding-left: 5px;
+}
+
+.arrow_PREV:after {
+  left: 0;
+  right: auto;
+}
+
+.arrow_NEXT {
+  padding-right: 5px;
+}
+
+.arrow:disabled {
+  cursor: default;
+}
+
+.arrow:disabled::after {
+  background: #c4c4c430;
+}

@@ -1,0 +1,33 @@
+.filter_sec {
+  border: 1px solid;
+  padding: 30px 20px;
+  border-radius: 15px;
+}
+
+.filter_sec__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter_sec__header p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  padding-right: 30px;
+}
+
+.filter_sec__header button {
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  border: none;
+  outline: none;
+}
+
+.filter_sec__content > .filter_sec__line:not(:last-child) {
+  margin-bottom: 15px;
+}

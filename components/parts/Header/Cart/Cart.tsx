@@ -1,7 +1,8 @@
 import { Button, IconButton } from "@/components/UI/Button/Button";
+import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { Arrow, Basket, BasketFilled } from "@/styles/icons";
 import { colors } from "@/styles/theme";
-import fetcher from "@/utils/fetcher/cartFetcher";
+import fetcher, { removeProductCart } from "@/utils/fetcher/cartFetcher";
 import swrOptions from "@/utils/fetcher/options";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -14,11 +15,11 @@ const Cart = () => {
 
   const cartMenuRef = useRef(null);
 
-  const { data: cartProducts = [] } = useSWR(
-    !mobileDeviceOn && "cart",
-    fetcher,
-    swrOptions
-  );
+  const {
+    data: cartProducts = [],
+    mutate: mutateCartProducts,
+    isValidating: cartLoading,
+  } = useSWR(!mobileDeviceOn && "cart/all", fetcher, swrOptions);
 
   const toggleCartMenuHandler = useCallback(() => {
     cartMenuRef?.current?.classList.contains(
@@ -46,6 +47,16 @@ const Cart = () => {
 
   useEffect(() => {
     window.innerWidth > 993 && setMobileDeviceOn(false);
+  }, []);
+
+  const onRemoveProductHandler = useCallback((id) => {
+    mutateCartProducts(async (currentCartProducts) => {
+      const updatedCartProducts = currentCartProducts?.filter(
+        (cartProd) => cartProd.id !== id
+      );
+      await removeProductCart(id);
+      return updatedCartProducts;
+    });
   }, []);
 
   return (
@@ -93,7 +104,7 @@ const Cart = () => {
             <Arrow width="15" height="8" fill={colors.black[100]} dir="-180" />
             Back
           </Button>
-          <h4
+          <p
             className={styles.header_cart__menu_title}
             style={{ color: colors.black[100] }}
           >
@@ -101,39 +112,57 @@ const Cart = () => {
             <sup style={{ color: colors.black[60] }}>
               ({cartProducts?.length})
             </sup>
-          </h4>
+          </p>
           <div className={styles.header_cart__menu_content}>
-            {cartProducts?.length === 0 ? (
-              <div className={styles.header_cart__menu_empty}>
-                <div
-                  className={styles.header_cart__menu_empty_icon}
-                  style={{ backgroundColor: colors.cyan[70] }}
-                >
-                  <Basket width="30" height="30" fill={colors.cyan[90]} />
-                </div>
-                <p style={{ color: colors.black[80] }}>Your cart is empty.</p>
-              </div>
+            {cartLoading ? (
+              <Skeleton
+                width="100%"
+                height="100%"
+                number={5}
+                bgColor={colors.black[80]}
+                maxHeight="100px"
+              />
             ) : (
               <>
-                <div className={styles.header_cart__menu_products}>
-                  {cartProducts
-                    ?.filter((_, index) => index < 5)
-                    ?.map(({ id, title, image, productID, price }) => (
-                      <Product
-                        key={id}
-                        product={{ title, image, productID, price }}
-                      />
-                    ))}
-                </div>
-                {cartProducts?.length > 5 && (
-                  <div className={styles.header_cart__view_all}>
-                    <Link href="#">
-                      <a>
-                        View All{" "}
-                        <Arrow width="15" height="8" fill={colors.black[100]} />
-                      </a>
-                    </Link>
+                {cartProducts?.length === 0 ? (
+                  <div className={styles.header_cart__menu_empty}>
+                    <div
+                      className={styles.header_cart__menu_empty_icon}
+                      style={{ backgroundColor: colors.cyan[70] }}
+                    >
+                      <Basket width="30" height="30" fill={colors.cyan[90]} />
+                    </div>
+                    <p style={{ color: colors.black[80] }}>
+                      Your cart is empty.
+                    </p>
                   </div>
+                ) : (
+                  <>
+                    <div className={styles.header_cart__menu_products}>
+                      {cartProducts
+                        ?.filter((_, index) => index < 5)
+                        ?.map((product) => (
+                          <Product
+                            key={product.id}
+                            product={product}
+                            onRemoved={onRemoveProductHandler}
+                            mutationID={product.id}
+                          />
+                        ))}
+                    </div>
+                    <div className={styles.header_cart__view_all}>
+                      <Link href="/cart">
+                        <a>
+                          View Cart{" "}
+                          <Arrow
+                            width="15"
+                            height="8"
+                            fill={colors.black[100]}
+                          />
+                        </a>
+                      </Link>
+                    </div>
+                  </>
                 )}
               </>
             )}
