@@ -2,6 +2,7 @@ import { Button, IconButton } from "@/components/UI/Button/Button";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { Arrow, Basket, BasketFilled } from "@/styles/icons";
 import { colors } from "@/styles/theme";
+import { arrayOfSimpleProductsReturn } from "@/utils/dataTypes";
 import fetcher, { removeProductCart } from "@/utils/fetcher/cartFetcher";
 import swrOptions from "@/utils/fetcher/options";
 import Link from "next/link";
@@ -50,13 +51,15 @@ const Cart = () => {
   }, []);
 
   const onRemoveProductHandler = useCallback((id) => {
-    mutateCartProducts(async (currentCartProducts) => {
-      const updatedCartProducts = currentCartProducts?.filter(
-        (cartProd) => cartProd.id !== id
-      );
-      await removeProductCart(id);
-      return updatedCartProducts;
-    });
+    mutateCartProducts(
+      async (currentCartProducts: arrayOfSimpleProductsReturn) => {
+        const updatedCartProducts = currentCartProducts?.filter(
+          (cartProd) => cartProd.id !== id
+        );
+        await removeProductCart(id);
+        return updatedCartProducts;
+      }
+    );
   }, []);
 
   return (

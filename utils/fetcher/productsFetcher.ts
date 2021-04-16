@@ -1,10 +1,10 @@
 import { db, auth } from "@/lib/firebase";
 import {popularProducts} from "stockary_config";
-import { productDataReturn, productData, productsFetcherParams } from "../dataTypes";
+import { productDataReturn, productsFetcherParams } from "../dataTypes";
 import {restoreFilterString, restructureProductsReturnedData} from '../generalFunctions';
 
 const fetcher = async (...[key, filter]: productsFetcherParams): Promise<productDataReturn> => {
-  let products: productData | productData[];
+  let products = [];
   if(key === 'products/popular') {
   await db
     .collection("products")
@@ -56,7 +56,7 @@ const fetcher = async (...[key, filter]: productsFetcherParams): Promise<product
     .doc(key.split('products/').join(''))
     .get()
     .then(doc => {
-      products = restructureProductsReturnedData(doc.data());
+      products = [restructureProductsReturnedData(doc.data())];
     });
   }
   

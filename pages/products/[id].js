@@ -9,7 +9,7 @@ export const getStaticProps = async ({ params }) => {
   const product = await productsfetcher(`products/${params.id}`);
   return {
     props: {
-      product,
+      product: product[0],
     },
   };
 };

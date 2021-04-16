@@ -67,4 +67,4 @@ export type productData = {
   title: string
 }
 
-export type productDataReturn = productData | productData[] | [] | {};
+export type productDataReturn = productData[] | []
