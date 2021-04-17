@@ -43,14 +43,13 @@ const Header = () => {
   const onAuthHandler = useCallback(
     async (type) => {
       if (user && type !== "profile") {
-        await signout();
-        reload();
+        await signout().then(() => {
+          reload();
+        });
       } else if (user && type === "profile") {
         routerPush("/profile");
       } else {
-        await signin().then(() => {
-          reload();
-        });
+        await signin();
       }
     },
     [user]

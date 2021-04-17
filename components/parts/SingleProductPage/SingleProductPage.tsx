@@ -54,7 +54,7 @@ const SingleProductPage = ({ product }) => {
   const router = useRouter();
 
   const { data: cartProducts = [], mutate: mutateCartProducts } = useSWR(
-    "cart/all",
+    user && "cart/all",
     cartFetcher,
     options
   );
@@ -86,8 +86,6 @@ const SingleProductPage = ({ product }) => {
     });
     if (flag) {
       setIsAddedToCart(true);
-    } else {
-      setIsAddedToCart(false);
     }
   }, [cartProducts]);
 
@@ -108,9 +106,7 @@ const SingleProductPage = ({ product }) => {
 
   const onAddToCartHandler = useCallback(async () => {
     if (!user) {
-      await signin().then(() => {
-        router.reload();
-      });
+      await signin();
     } else {
       let flag = false;
       cartProducts.forEach((prod) => {

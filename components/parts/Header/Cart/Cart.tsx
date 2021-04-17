@@ -5,6 +5,7 @@ import { colors } from "@/styles/theme";
 import { SimpleProduct } from "@/utils/dataTypes";
 import fetcher, { removeProductCart } from "@/utils/fetcher/cartFetcher";
 import swrOptions from "@/utils/fetcher/options";
+import { useAuth } from "@/utils/useAuth";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
@@ -16,11 +17,13 @@ const Cart = () => {
 
   const cartMenuRef = useRef(null);
 
+  const { user } = useAuth();
+
   const {
     data: cartProducts = [],
     mutate: mutateCartProducts,
     isValidating: cartLoading,
-  } = useSWR(!mobileDeviceOn && "cart/all", fetcher, swrOptions);
+  } = useSWR(!mobileDeviceOn && user && "cart/all", fetcher, swrOptions);
 
   const toggleCartMenuHandler = useCallback(() => {
     cartMenuRef?.current?.classList.contains(
