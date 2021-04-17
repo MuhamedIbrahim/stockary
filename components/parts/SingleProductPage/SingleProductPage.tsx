@@ -17,6 +17,7 @@ import cartFetcher, { addProductCart } from "@/utils/fetcher/cartFetcher";
 import Badge from "@/components/UI/Badge/Badge";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { SimpleProduct } from "@/utils/dataTypes";
+import { useAuth } from "@/utils/useAuth";
 
 const SidebarBox = styled.div`
   border-radius: 15px;
@@ -42,6 +43,8 @@ const ImageItemCarousel = styled.div.attrs((props) => ({
 `;
 
 const SingleProductPage = ({ product }) => {
+  const { user, signin } = useAuth();
+
   const [isFav, setIsFav] = useState(false);
 
   const [isAddedToCart, setIsAddedToCart] = useState(false);
@@ -104,18 +107,24 @@ const SingleProductPage = ({ product }) => {
   }, [isFav, product, router.query.id]);
 
   const onAddToCartHandler = useCallback(async () => {
-    let flag = false;
-    cartProducts.forEach((prod) => {
-      if ((prod as SimpleProduct).productID === router.query.id) flag = true;
-    });
+    if (!user) {
+      await signin().then(() => {
+        router.reload();
+      });
+    } else {
+      let flag = false;
+      cartProducts.forEach((prod) => {
+        if ((prod as SimpleProduct).productID === router.query.id) flag = true;
+      });
 
-    if (!flag) {
-      const addedAt = Date.now();
-      await addProductCart(product, router.query.id, addedAt);
-      setIsAddedToCart(true);
-      mutateCartProducts();
+      if (!flag) {
+        const addedAt = Date.now();
+        await addProductCart(product, router.query.id, addedAt);
+        setIsAddedToCart(true);
+        mutateCartProducts();
+      }
     }
-  }, [product, router.query.id, cartProducts]);
+  }, [product, router.query.id, router.reload, cartProducts, user]);
 
   return (
     <div className="st_main_section">

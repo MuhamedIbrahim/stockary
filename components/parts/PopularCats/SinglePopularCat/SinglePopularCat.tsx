@@ -14,7 +14,7 @@ const SinglePopularCat = ({ id, name }) => {
           className={styles.single_cat__img}
           style={{ backgroundColor: colors.cyan[70] }}
         >
-          <Link href={`categories/${id}`}>
+          <Link href={`products?cat=${id}`}>
             <a>
               <Image
                 src={`/images/categories/${name.split(" ").join("")}.png`}
@@ -26,7 +26,7 @@ const SinglePopularCat = ({ id, name }) => {
             </a>
           </Link>
         </div>
-        <Link href={`categories/${id}`}>
+        <Link href={`products?cat=${id}`}>
           <a
             className={styles.single_cat__title}
             style={{ color: colors.black[100] }}

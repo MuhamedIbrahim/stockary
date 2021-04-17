@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 const Header = () => {
   const { user, isLoading, signout, signin } = useAuth();
 
-  const { reload, push } = useRouter();
+  const { reload, push: routerPush } = useRouter();
 
   const navMenuRef = useRef(null);
 
@@ -46,10 +46,11 @@ const Header = () => {
         await signout();
         reload();
       } else if (user && type === "profile") {
-        push("/profile");
+        routerPush("/profile");
       } else {
-        await signin();
-        reload();
+        await signin().then(() => {
+          reload();
+        });
       }
     },
     [user]
