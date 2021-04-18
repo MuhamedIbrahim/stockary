@@ -5,6 +5,7 @@ import Link from "next/link";
 
 export const Button = ({
   children,
+  name,
   link = false,
   href = "",
   size = "sm",
@@ -36,6 +37,7 @@ export const Button = ({
   return link ? (
     <Link href={href}>
       <a
+        id={name}
         style={inlineStyle}
         className={[styles.button, styles[`button--${size}`], className].join(
           " "
@@ -46,6 +48,7 @@ export const Button = ({
     </Link>
   ) : (
     <button
+      name={name}
       style={inlineStyle}
       className={[styles.button, styles[`button--${size}`], className].join(
         " "
@@ -59,6 +62,7 @@ export const Button = ({
 
 export const IconButton = ({
   children,
+  name,
   link = false,
   href = "",
   size = "sm",
@@ -88,6 +92,7 @@ export const IconButton = ({
   return link ? (
     <Link href={href}>
       <a
+        id={name}
         style={inlineStyle}
         className={[
           styles.icon_button,
@@ -101,6 +106,7 @@ export const IconButton = ({
     </Link>
   ) : (
     <button
+      name={name}
       style={inlineStyle}
       className={[
         styles.icon_button,

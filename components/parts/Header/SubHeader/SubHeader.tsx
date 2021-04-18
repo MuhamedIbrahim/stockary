@@ -55,6 +55,7 @@ const SubHeader = () => {
             style={{ backgroundColor: colors.white[100] }}
           >
             <Button
+              name="Back Home"
               id="sub_header__nav_close"
               size="xs"
               bgColor="transparent"

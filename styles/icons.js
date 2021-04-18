@@ -84,6 +84,7 @@ export const User = ({
     {userPhoto ? (
       <Image
         src={userPhoto}
+        alt="User"
         width={+width + 5}
         height={+height + 5}
         objectFit="contain"

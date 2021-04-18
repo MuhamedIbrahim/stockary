@@ -73,7 +73,12 @@ const ImageCarouselPagination = ({
           disabled={activePage === page}
         >
           {images[page] && (
-            <Image src={images[page]} layout="fill" objectFit="contain" />
+            <Image
+              src={images[page]}
+              alt={`Element ${page + 1}`}
+              layout="fill"
+              objectFit="contain"
+            />
           )}
         </Component>
       ))}

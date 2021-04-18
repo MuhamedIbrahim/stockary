@@ -11,6 +11,7 @@ const ProductsHeader = ({ title, showStyle = "list", changed }) => {
           <h1 style={{ color: colors.black[100] }}>{title}</h1>
           <div className={styles.header__show_style}>
             <IconButton
+              name="Lists View"
               className={
                 showStyle === "list" ? styles.header__show_style_active : ""
               }
@@ -22,6 +23,7 @@ const ProductsHeader = ({ title, showStyle = "list", changed }) => {
               <SquareList fill={colors.black[100]} width="16" height="16" />
             </IconButton>
             <IconButton
+              name="Rows View"
               className={
                 showStyle === "row" ? styles.header__show_style_active : ""
               }

@@ -57,12 +57,12 @@ export const InputSearch = ({
         {...rest}
       />
       <IconButton
+        name="Search Submit"
         bgColor="transparent"
         borderColor="transparent"
         size="lg"
         type="submit"
         disabled={disabled}
-        name="Search"
       >
         <Search width="20" height="20" fill={colors.white[100]} />
       </IconButton>

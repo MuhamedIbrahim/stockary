@@ -70,6 +70,7 @@ const FeaturedProds = () => {
                           </p>
                         )}
                         <Button
+                          name="Shop Now"
                           size="xl"
                           bgColor={colors.cyan[90]}
                           color={colors.white[100]}
@@ -87,6 +88,7 @@ const FeaturedProds = () => {
                       </div>
                       <div className={styles.featured_prods__prod_image}>
                         <Image
+                          alt={prod.fields.title}
                           onDragStart={(e) => e.preventDefault()}
                           src={"https:" + prod.fields.image.fields.file.url}
                           layout="fill"

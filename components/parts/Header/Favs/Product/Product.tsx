@@ -15,8 +15,8 @@ const Product = ({ product, onRemoved, mutationID }: simpleProductProps) => {
       >
         {product.image ? (
           <Image
+            alt={product.title}
             src={product.image}
-            alt="iPhone"
             width="70"
             height="65"
             objectFit="contain"
@@ -55,6 +55,7 @@ const Product = ({ product, onRemoved, mutationID }: simpleProductProps) => {
         </span>
       </div>
       <IconButton
+        name="Remove Product"
         size="sm"
         bgColor="transparent"
         onClick={() => {

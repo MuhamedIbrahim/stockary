@@ -18,6 +18,7 @@ const SinglePopularCat = ({ id, name }) => {
             <a>
               <Image
                 src={`/images/categories/${name.split(" ").join("")}.png`}
+                alt={name}
                 height="120"
                 width="138"
                 objectFit="contain"

@@ -210,6 +210,7 @@ const AllProducts = ({
               <div className={styles.all_products__filter_section}>
                 <div className={styles.all_products__filter_section_toggle}>
                   <Button
+                    name="Show Filter"
                     size="sm"
                     bgColor={colors.cyan[70]}
                     color={colors.black[100]}
@@ -267,6 +268,7 @@ const AllProducts = ({
                   ref={productsFilterSectionsCta}
                 >
                   <Button
+                    name="Apply Filter"
                     size="sm"
                     bgColor={colors.blue[100]}
                     color={colors.white[100]}
@@ -276,6 +278,7 @@ const AllProducts = ({
                     Apply Filters
                   </Button>
                   <Button
+                    name="Clear Filter"
                     size="sm"
                     bgColor={colors.cyan[70]}
                     color={colors.black[100]}
@@ -324,6 +327,7 @@ const AllProducts = ({
                   </div>
                   <div className={styles.all_products__cta}>
                     <Button
+                      name="Load Products"
                       size="lg"
                       bgColor={colors.blue[100]}
                       color={colors.white[100]}

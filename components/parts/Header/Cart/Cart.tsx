@@ -100,6 +100,7 @@ const Cart = () => {
           style={{ backgroundColor: colors.white[100] }}
         >
           <Button
+            name="Back Home"
             id="header_cart__menu_close"
             size="xs"
             bgColor="transparent"

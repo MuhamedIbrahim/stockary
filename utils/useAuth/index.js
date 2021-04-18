@@ -40,7 +40,7 @@ function useProvideAuth() {
         setUser(userInfo);
         return response.user;
       })
-      .catch((error) => error.message);
+      .catch((error) => console.error(error.message));
   };
 
   const assignUser = (user) => {

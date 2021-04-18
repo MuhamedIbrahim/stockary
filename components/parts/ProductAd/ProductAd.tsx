@@ -44,6 +44,7 @@ const ProductAd = ({
                 <div className={styles.product_ad__image}>
                   <Image
                     src={`http:${adData?.productImage.fields.file.url}`}
+                    alt={adData?.productName}
                     layout="fill"
                     objectFit="contain"
                   />
@@ -59,6 +60,7 @@ const ProductAd = ({
                   </div>
                   <div className={styles.product_ad__link}>
                     <Button
+                      name="Shop Now"
                       size="lg"
                       color={colors.white[100]}
                       bgColor={colors.blue[100]}

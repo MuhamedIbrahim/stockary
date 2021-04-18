@@ -54,6 +54,7 @@ const PopularProducts = () => {
                 </div>
                 <div className={styles.popular_products__cta}>
                   <Button
+                    name="More Products"
                     size="lg"
                     bgColor={colors.blue[100]}
                     color={colors.white[100]}

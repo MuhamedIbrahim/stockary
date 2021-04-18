@@ -74,6 +74,7 @@ const Header = () => {
                 style={{ backgroundColor: colors.white[100] }}
               >
                 <Button
+                  name="Back Home"
                   id="main_header__nav_close"
                   size="xs"
                   bgColor="transparent"
@@ -121,6 +122,7 @@ const Header = () => {
             </div>
             <div className={styles.main_header__logo}>
               <IconButton
+                name="Menu List"
                 size="md"
                 bgColor="transparent"
                 mr="15px"
@@ -143,6 +145,7 @@ const Header = () => {
                   <Favs />
                   <Cart />
                   <Button
+                    name="Profile"
                     size="sm"
                     bgColor={colors.blue[100]}
                     borderColor="transparent"

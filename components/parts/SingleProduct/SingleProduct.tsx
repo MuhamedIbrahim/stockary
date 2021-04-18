@@ -51,6 +51,7 @@ const SingleProduct = ({
             {product.images[0] ? (
               <Image
                 src={product.images[0]}
+                alt={product.title}
                 layout="fill"
                 objectFit="contain"
               />
@@ -67,7 +68,12 @@ const SingleProduct = ({
         </Link>
       </div>
       <div className={styles.single_product__info}>
-        <IconButton size="md" bgColor={colors.cyan[90]} onClick={onUpdateFav}>
+        <IconButton
+          name="Favourite"
+          size="md"
+          bgColor={colors.cyan[90]}
+          onClick={onUpdateFav}
+        >
           {isFav ? (
             <HeartFilled fill={colors.white[100]} width="15" height="13" />
           ) : (

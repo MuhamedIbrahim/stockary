@@ -32,6 +32,7 @@ const SearchField = () => {
   return (
     <div className={styles.search_container}>
       <IconButton
+        name="Search"
         size="lg"
         bgColor={colors.white[90]}
         borderColor="transparent"
@@ -46,6 +47,7 @@ const SearchField = () => {
         ref={searchMenuRef}
       >
         <IconButton
+          name="Close Search"
           size="lg"
           bgColor="transparent"
           className={styles.search_field__close}

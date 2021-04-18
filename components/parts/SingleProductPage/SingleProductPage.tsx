@@ -162,6 +162,7 @@ const SingleProductPage = ({ product }) => {
                   </div>
                 )}
                 <IconButton
+                  name="Favourite"
                   size="lg"
                   bgColor={colors.cyan[90]}
                   onClick={onUpdateFav}
@@ -193,7 +194,12 @@ const SingleProductPage = ({ product }) => {
                       key={index}
                       onDragStart={(e) => e.preventDefault()}
                     >
-                      <Image src={image} layout="fill" objectFit="contain" />
+                      <Image
+                        src={image}
+                        alt={product.title}
+                        layout="fill"
+                        objectFit="contain"
+                      />
                     </ImageItemCarousel>
                   )) || <div></div>}
                 </Carousel>
@@ -311,6 +317,7 @@ const SingleProductPage = ({ product }) => {
                   <div className={styles.product__sidebar_box_cta}>
                     {isAddedToCart ? (
                       <Button
+                        name="Checkout"
                         size="lg"
                         bgColor={colors.cyan[90]}
                         color={colors.white[100]}
@@ -320,6 +327,7 @@ const SingleProductPage = ({ product }) => {
                       </Button>
                     ) : (
                       <Button
+                        name="Add To Cart"
                         size="lg"
                         bgColor={colors.cyan[90]}
                         color={colors.white[100]}
@@ -362,6 +370,7 @@ const SingleProductPage = ({ product }) => {
                   </div>
                   <div className={styles.product__sidebar_box_cta}>
                     <Button
+                      name="Retailer Profile"
                       size="lg"
                       bgColor={colors.cyan[50]}
                       color={colors.cyan[90]}
