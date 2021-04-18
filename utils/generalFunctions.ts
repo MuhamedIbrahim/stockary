@@ -40,13 +40,6 @@ export const restructureProductsReturnedData = (returnedData) => {
     return updatedProd;
   }
 
-  let updatedData;
-  if(Array.isArray(returnedData)) {
-    updatedData = returnedData.map(updateProductsData);
-  } else {
-    if(Object.keys(returnedData).length > 0) {
-      updatedData = updateProductsData(returnedData);
-    }
-  }
+  const updatedData = returnedData.map(updateProductsData);
   return updatedData;
 }

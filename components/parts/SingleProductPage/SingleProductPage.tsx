@@ -86,6 +86,8 @@ const SingleProductPage = ({ product }) => {
     });
     if (flag) {
       setIsAddedToCart(true);
+    } else {
+      setIsAddedToCart(false);
     }
   }, [cartProducts]);
 

@@ -131,7 +131,7 @@ const Header = () => {
                 <Menu height="18" width="18" fill={colors.white[100]} />
               </IconButton>
               <Link href="/">
-                <a>
+                <a aria-label="Stockary">
                   <Logo height="30" width="120" fill={colors.white[100]} />
                 </a>
               </Link>

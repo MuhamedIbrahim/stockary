@@ -37,7 +37,7 @@ export const Button = ({
   return link ? (
     <Link href={href}>
       <a
-        id={name}
+        aria-label={name}
         style={inlineStyle}
         className={[styles.button, styles[`button--${size}`], className].join(
           " "
@@ -48,7 +48,7 @@ export const Button = ({
     </Link>
   ) : (
     <button
-      name={name}
+      aria-label={name}
       style={inlineStyle}
       className={[styles.button, styles[`button--${size}`], className].join(
         " "
@@ -92,7 +92,7 @@ export const IconButton = ({
   return link ? (
     <Link href={href}>
       <a
-        id={name}
+        aria-label={name}
         style={inlineStyle}
         className={[
           styles.icon_button,
@@ -106,7 +106,7 @@ export const IconButton = ({
     </Link>
   ) : (
     <button
-      name={name}
+      arial-label={name}
       style={inlineStyle}
       className={[
         styles.icon_button,

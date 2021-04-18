@@ -58,7 +58,11 @@ const fetcher = async (...[key, filter]: productsFetcherParams): Promise<product
     .doc(key.split('products/').join(''))
     .get()
     .then(doc => {
-      products = [restructureProductsReturnedData(doc.data())];
+      if(doc.exists) {
+        products = restructureProductsReturnedData([doc.data()]);
+      } else {
+        products = [];
+      }
     });
   }
   
