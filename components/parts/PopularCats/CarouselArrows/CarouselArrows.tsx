@@ -6,7 +6,7 @@ import styles from "./CarouselArrows.module.css";
 const CarouselArrows = ({ type, onClick, isEdge }) => {
   return (
     <button
-      name="Carousel Pagination"
+      aria-label="Carousel Pagination"
       disabled={isEdge}
       className={[styles.arrow, styles[`arrow_${type}`]].join(" ")}
       onClick={onClick}

@@ -1,9 +1,10 @@
+import firebase from 'firebase/app';
 import { db, auth } from "@/lib/firebase";
 import {popularProducts} from "stockary_config";
 import { productDataReturn, productsFetcherParams } from "../dataTypes";
 import {restoreFilterString, restructureProductsReturnedData} from '../generalFunctions';
 
-const fetcher = async (...[key, filter]: productsFetcherParams): Promise<productDataReturn> => {
+const fetcher = async (...[key, filter, searchQuery = '']: productsFetcherParams): Promise<productDataReturn> => {
   let products = [];
   if(key === 'products/popular') {
   await db
@@ -52,6 +53,17 @@ const fetcher = async (...[key, filter]: productsFetcherParams): Promise<product
       snap.forEach(doc => docs.push(Object.assign({id: doc.id}, doc.data())));
       products = restructureProductsReturnedData(docs);
     });
+  } else if(key === 'products/search') {
+    await db
+    .collection("products")
+    .where("title", "array-contains-any", searchQuery.split(' '))
+    .limit(12)
+    .get()
+    .then(snap => {
+      const docs = [];
+      snap.forEach(doc => docs.push(Object.assign({id: doc.id}, doc.data())));
+      products = restructureProductsReturnedData(docs);
+    });
   } else {
     await db
     .collection("products")
@@ -68,6 +80,7 @@ const fetcher = async (...[key, filter]: productsFetcherParams): Promise<product
   
   return products;
 }
+export default fetcher;
 
 export const toggleProductsShow = (showStyle, setState) => {
   setState(showStyle);
@@ -79,4 +92,10 @@ export const getCachedProductsShow = (setState) => {
   setState(JSON.parse(showStyle) || "list");
 }
 
-export default fetcher;
+export const updatePurchasedItems = (ids: string[]) => {
+  ids.forEach(async item => {
+    await db.collection('products').doc(item).update({
+      purchases: firebase.firestore.FieldValue.increment(1)
+    });
+  });
+}

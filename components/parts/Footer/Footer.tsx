@@ -17,7 +17,7 @@ const Footer = () => {
             <div className={styles.footer__section}>
               <div className={styles.footer__logo}>
                 <Link href="#">
-                  <a>
+                  <a aria-label="Stockary">
                     <Logo height="30" width="120" fill={colors.white[100]} />
                   </a>
                 </Link>

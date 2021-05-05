@@ -5,7 +5,7 @@ const CarouselPagination = ({ pages, activePage, onClick, styles }) => {
     <div className={styles.featured_prods_carousel_pagination}>
       {pages?.map((page) => (
         <button
-          name="Carousel Pagination"
+          aria-label="Carousel Pagination"
           onClick={() => onClick(page)}
           key={page}
           disabled={activePage === page}

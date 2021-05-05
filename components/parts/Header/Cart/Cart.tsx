@@ -23,7 +23,11 @@ const Cart = () => {
     data: cartProducts = [],
     mutate: mutateCartProducts,
     isValidating: cartLoading,
-  } = useSWR(!mobileDeviceOn && user && "cart/all", fetcher, swrOptions);
+  } = useSWR(
+    !mobileDeviceOn && user && ["cart/all", user.uid],
+    fetcher,
+    swrOptions
+  );
 
   const toggleCartMenuHandler = useCallback(() => {
     cartMenuRef?.current?.classList.contains(
@@ -58,7 +62,7 @@ const Cart = () => {
       const updatedCartProducts = currentCartProducts.filter((cartProd) => {
         return (cartProd as SimpleProduct).id !== id;
       });
-      await removeProductCart(id);
+      await removeProductCart(id, user.uid);
       return updatedCartProducts;
     });
   }, []);
@@ -156,7 +160,7 @@ const Cart = () => {
                         ))}
                     </div>
                     <div className={styles.header_cart__view_all}>
-                      <Link href="/cart">
+                      <Link href="/profile/cart">
                         <a>
                           View Cart{" "}
                           <Arrow

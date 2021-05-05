@@ -31,7 +31,7 @@ const FilterSection = ({
       <div className={styles.filter_sec__header}>
         <p style={{ color: colors.black[100] }}>{title}</p>
         <button
-          name="Clear Section Filter"
+          aria-label="Clear Section Filter"
           style={{ color: colors.black[70] }}
           onClick={() => onClear(contentType)}
         >

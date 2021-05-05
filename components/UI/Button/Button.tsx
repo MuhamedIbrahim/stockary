@@ -17,6 +17,7 @@ export const Button = ({
   mt = "0",
   mb = "0",
   m = "0",
+  width = "auto",
   className = "",
   ...rest
 }) => {
@@ -30,6 +31,7 @@ export const Button = ({
       marginLeft: ml,
       marginBottom: mb,
       marginTop: mt,
+      width: width,
     }),
     []
   );

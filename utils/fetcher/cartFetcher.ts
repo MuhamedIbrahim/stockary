@@ -1,8 +1,9 @@
-import { db, auth } from "@/lib/firebase";
+import { db} from "@/lib/firebase";
 import { arrayOfSimpleProductsReturn, productData } from "@/utils/dataTypes";
+import { mutate } from "swr";
 
-const fetcher = async (key: string): Promise<arrayOfSimpleProductsReturn> => {
-  const customerID = auth.currentUser.uid;
+const fetcher = async (...[key, uid]): Promise<arrayOfSimpleProductsReturn> => {
+  const customerID = uid;
   let cartProductsRef;
   if(key === "cart/all") {
     cartProductsRef = await db
@@ -32,8 +33,8 @@ const fetcher = async (key: string): Promise<arrayOfSimpleProductsReturn> => {
 
 export default fetcher;
 
-export const removeProductCart = async (prodID: string): Promise<void> => {
-    const customerID = auth.currentUser.uid;
+export const removeProductCart = async (prodID: string, uid: string): Promise<void> => {
+    const customerID = uid;
     await db
       .collection("customers")
       .doc(customerID)
@@ -43,15 +44,33 @@ export const removeProductCart = async (prodID: string): Promise<void> => {
       .catch(error => console.error(error.message));
 }
 
-export const addProductCart = async (product: productData, id: string | string[], addedAt: number): Promise<void> => {
-    const customerID = auth.currentUser.uid;
+export const removeAllProductsCart = async (uid: string): Promise<void> => {
+    const customerID = uid;
+    await db
+      .collection("customers")
+      .doc(customerID)
+      .collection("cart")
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(async doc => {
+          doc.ref.delete();
+        });
+      })
+      .then(() => {
+        mutate("cart/all");
+      })
+      .catch(error => console.error(error.message));
+}
+
+export const addProductCart = async (product: productData, id: string | string[], addedAt: number, uid): Promise<void> => {
+    const customerID = uid;
     await db
       .collection("customers")
       .doc(customerID)
       .collection("cart")
       .add({
         image: product.images[0] || '',
-        price: product.price,
+        price: product.salePrice ? product.salePrice : product.price,
         title: product.title,
         productID: id,
         addedAt

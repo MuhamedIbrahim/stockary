@@ -18,6 +18,7 @@ import Badge from "@/components/UI/Badge/Badge";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { SimpleProduct } from "@/utils/dataTypes";
 import { useAuth } from "@/utils/useAuth";
+import { ProductTitle } from "@/utils/generalComponents";
 
 const SidebarBox = styled.div`
   border-radius: 15px;
@@ -53,11 +54,11 @@ const SingleProductPage = ({ product }) => {
 
   const router = useRouter();
 
-  const { data: cartProducts = [], mutate: mutateCartProducts } = useSWR(
-    user && "cart/all",
-    cartFetcher,
-    options
-  );
+  const {
+    data: cartProducts = [],
+    isValidating: isLoadingCart,
+    mutate: mutateCartProducts,
+  } = useSWR(user && ["cart/all", user.uid], cartFetcher, options);
 
   const productRating = useMemo(() => {
     return product?.reviews
@@ -65,11 +66,11 @@ const SingleProductPage = ({ product }) => {
       : 0;
   }, [product]);
 
-  const { data: favProducts = [], mutate: mutateFavProducts } = useSWR(
-    "favs",
-    favFetcher,
-    options
-  );
+  const {
+    data: favProducts = [],
+    isValidating: isLoadingFavs,
+    mutate: mutateFavProducts,
+  } = useSWR("favs", favFetcher, options);
 
   useEffect(() => {
     let flag = false;
@@ -77,7 +78,7 @@ const SingleProductPage = ({ product }) => {
       if (fav.productID === router.query.id) flag = true;
     });
     setIsFav(flag);
-  }, [favProducts, router.query.id]);
+  }, [isLoadingFavs, router.query.id]);
 
   useEffect(() => {
     let flag = false;
@@ -89,7 +90,7 @@ const SingleProductPage = ({ product }) => {
     } else {
       setIsAddedToCart(false);
     }
-  }, [cartProducts]);
+  }, [isLoadingCart, router.query.id]);
 
   useEffect(() => {
     if (product && Object.keys(product).length > 0) {
@@ -117,7 +118,7 @@ const SingleProductPage = ({ product }) => {
 
       if (!flag) {
         const addedAt = Date.now();
-        await addProductCart(product, router.query.id, addedAt);
+        await addProductCart(product, router.query.id, addedAt, user.uid);
         setIsAddedToCart(true);
         mutateCartProducts();
       }
@@ -140,7 +141,7 @@ const SingleProductPage = ({ product }) => {
               fullwidth
             />
           ) : (
-            product.title
+            <ProductTitle wordCount={0}>{product.title}</ProductTitle>
           )}
         </h1>
         <div className={styles.product__container}>
@@ -302,9 +303,26 @@ const SingleProductPage = ({ product }) => {
               ) : (
                 <>
                   <div className={styles.product__price_box_header}>
-                    <span style={{ color: colors.violet[100] }}>
-                      ${product.price}
-                    </span>
+                    <p
+                      style={{
+                        color: product.salePrice
+                          ? colors.black[70]
+                          : colors.violet[100],
+                      }}
+                    >
+                      {product.salePrice && (
+                        <span
+                          style={{
+                            color: product.salePrice
+                              ? colors.violet[100]
+                              : colors.black[70],
+                          }}
+                        >
+                          ${product.salePrice}
+                        </span>
+                      )}
+                      <b>${product.price}</b>
+                    </p>
                     <span style={{ color: colors.black[80] }}>
                       {productRating}/5
                       <span className={styles.product_reviews__single_rating}>
@@ -320,16 +338,20 @@ const SingleProductPage = ({ product }) => {
                     {isAddedToCart ? (
                       <Button
                         name="Checkout"
+                        width="100%"
                         size="lg"
                         bgColor={colors.cyan[90]}
                         color={colors.white[100]}
                         mt="20px"
+                        link
+                        href="/profile/cart"
                       >
                         Go checkout
                       </Button>
                     ) : (
                       <Button
                         name="Add To Cart"
+                        width="100%"
                         size="lg"
                         bgColor={colors.cyan[90]}
                         color={colors.white[100]}
@@ -377,6 +399,7 @@ const SingleProductPage = ({ product }) => {
                       bgColor={colors.cyan[50]}
                       color={colors.cyan[90]}
                       mt="20px"
+                      width="100%"
                     >
                       Show Profile
                     </Button>

@@ -1,11 +1,9 @@
-import Header from "@/components/parts/Header/Header";
-import { useRouter } from "next/router";
+import SearchPage from "@/components/parts/SearchPage/SearchPage";
 
 const index = () => {
-  const { query: routerQuery } = useRouter();
   return (
     <>
-      <h1>Search: {routerQuery.s}</h1>
+      <SearchPage />
     </>
   );
 };

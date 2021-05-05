@@ -2,7 +2,7 @@ type simpleProductData = {
   image: string
   price: number
   salePrice?: number
-  title: string
+  title: string[]
   productID: string,
   addedAt?: number
 }
@@ -36,7 +36,8 @@ type productsQuery = {
 
 export type productsFetcherParams = [
   string,
-  productsQuery?
+  productsQuery?,
+  string?
 ]
 
 export type productData = {
@@ -64,7 +65,7 @@ export type productData = {
     reviewer: string
   }[]
   salePrice: string | null
-  title: string
+  title: string[]
 }
 
 export type productDataReturn = productData[] | []

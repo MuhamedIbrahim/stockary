@@ -106,7 +106,7 @@ const Favs = () => {
             </div>
             {favProducts.length > 4 && (
               <div className={styles.header_favs__view_all}>
-                <Link href="/favourites">
+                <Link href="/profile/favourites">
                   <a>
                     View All{" "}
                     <Arrow width="15" height="8" fill={colors.black[100]} />

@@ -20,7 +20,7 @@ const SearchField = () => {
 
   const onSubmitSearchHandler = useCallback((e) => {
     e.preventDefault();
-    routerPush(`search?s=${e?.target[0].value}`);
+    routerPush(`/search?s=${e?.target[0].value}`);
   }, []);
 
   const onToggleSearchMenuHandler = useCallback(() => {

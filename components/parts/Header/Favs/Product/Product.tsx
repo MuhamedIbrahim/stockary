@@ -5,6 +5,7 @@ import { IconButton } from "@/components/UI/Button/Button";
 import Image from "next/image";
 import { simpleProductProps } from "@/utils/dataTypes";
 import Link from "next/link";
+import { ProductTitle } from "@/utils/generalComponents";
 
 const Product = ({ product, onRemoved, mutationID }: simpleProductProps) => {
   return (
@@ -15,7 +16,7 @@ const Product = ({ product, onRemoved, mutationID }: simpleProductProps) => {
       >
         {product.image ? (
           <Image
-            alt={product.title}
+            alt={product.title.join(" ")}
             src={product.image}
             width="70"
             height="65"
@@ -36,8 +37,10 @@ const Product = ({ product, onRemoved, mutationID }: simpleProductProps) => {
           className={styles.fav_product__title}
           style={{ color: colors.black[100] }}
         >
-          <Link href={"/products/" + product?.productID || "#"}>
-            <a>{product?.title}</a>
+          <Link href={"/products/" + product.productID}>
+            <a>
+              <ProductTitle wordCount={6}>{product.title}</ProductTitle>
+            </a>
           </Link>
         </h5>
         <span

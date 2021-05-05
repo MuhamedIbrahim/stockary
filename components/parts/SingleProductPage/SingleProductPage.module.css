@@ -139,12 +139,24 @@
   align-items: center;
 }
 
-.product__price_box_header > span:first-child {
+.product__price_box_header p {
   font-size: 20px;
   font-weight: 600;
+  margin: 0;
+  line-height: 30px;
 }
 
-.product__price_box_header > span:last-child {
+.product__price_box_header p b {
+  font-weight: inherit;
+}
+
+.product__price_box_header p span + b {
+  font-size: 11px;
+  text-decoration: line-through;
+  margin-left: 5px;
+}
+
+.product__price_box_header > span {
   font-size: 13px;
   font-weight: 500;
 }

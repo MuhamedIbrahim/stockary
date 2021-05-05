@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { auth, provider } from "@/lib/firebase";
+import { useRouter } from "next/router";
 // import nookies from "nookies";
 
 const authContext = createContext();
@@ -18,6 +19,8 @@ function useProvideAuth() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const router = useRouter();
+
   class User {
     constructor(uid, displayName, email, photoURL) {
       this.name = displayName;
@@ -26,6 +29,10 @@ function useProvideAuth() {
       this.photo = photoURL;
     }
   }
+
+  const redirect = (path) => {
+    router.push(path);
+  };
 
   const signin = async () => {
     return await auth
@@ -89,5 +96,6 @@ function useProvideAuth() {
     signout,
     assignUser,
     isLoading,
+    redirect,
   };
 }
