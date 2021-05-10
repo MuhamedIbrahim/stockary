@@ -10,6 +10,7 @@
   "dependencies": {
     "@stripe/stripe-js": "^1.14.0",
     "contentful": "^8.2.1",
+    "date-fns": "^2.21.2",
     "firebase": "^8.3.1",
     "firebase-admin": "^9.5.0",
     "next": "10.0.9",

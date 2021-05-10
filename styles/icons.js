@@ -78,18 +78,19 @@ export const User = ({
   fill = "black",
   width = "auto",
   height = "auto",
-  userPhoto = false,
+  userPhoto = "",
 }) => (
   <>
     {userPhoto ? (
-      <Image
-        src={userPhoto}
-        alt="User"
-        width={+width + 5}
-        height={+height + 5}
-        objectFit="contain"
-        style={{ borderRadius: "50%" }}
-      />
+      <div style={{ borderRadius: "50%", overflow: "hidden", width, height }}>
+        <Image
+          src={userPhoto}
+          alt="User"
+          width={parseInt(width)}
+          height={parseInt(height)}
+          objectFit="contain"
+        />
+      </div>
     ) : (
       <svg fill="none" width={width} height={height} viewBox="0 0 20 20">
         <path stroke={fill} d="M19.5 10a9.5 9.5 0 11-19 0 9.5 9.5 0 0119 0z" />

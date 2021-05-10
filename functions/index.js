@@ -17,13 +17,32 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
       }
     )),
     mode: "payment",
-    client_reference_id: data[1],
-    success_url: `http://localhost:3000/checkout-success?&id=${data[0].map((item) => item.id).join("&id=")}`,
-    cancel_url: "http://localhost:3000",
-  }).then(() => {
-    admin.firestore().collection("users").doc(data[1]).update({
-      purchased: admin.firestore.FieldValue.arrayUnion(...data[0]),
+    success_url: "http://localhost:3000/checkout-success",
+    cancel_url: "http://localhost:3000/profile/cart",
+  }).then((res) => {
+    data[0].forEach((item) => {
+      admin.firestore().collection("products").doc(item.id).update({
+        purchases: admin.firestore.FieldValue.increment(item.quantity),
+      });
     });
+    return res;
+  }).then((res) => {
+    admin.firestore().collection("customers").doc(data[1])
+        .collection("purchased").add({
+          datePurchased: Date.now(),
+          products: data[0],
+        });
+    return res;
+  }).then((res) => {
+    admin.firestore().collection("customers").doc(data[1])
+        .collection("cart")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach(async (doc) => {
+            await doc.ref.delete();
+          });
+        });
+    return res;
   });
 
   return {

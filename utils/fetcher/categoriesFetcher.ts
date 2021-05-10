@@ -7,7 +7,7 @@ const fetcher = async (...[key, returnType = ""]): Promise<arrayOfCategoriesRetu
     if(key === 'categories/all') {
         await db
         .collection("categories")
-        .orderBy("products", "desc")
+        .orderBy("productsNumber", "desc")
         .get()
         .then(snap => {
             const allDocs = [];

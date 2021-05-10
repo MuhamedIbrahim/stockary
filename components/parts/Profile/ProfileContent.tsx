@@ -2,6 +2,7 @@ import { colors } from "@/styles/theme";
 import styled from "styled-components";
 import Cart from "./Cart";
 import Favourites from "./Favourites";
+import Purchases from "./Purchases";
 
 const Content = styled.div`
   margin-top: 40px;
@@ -29,6 +30,7 @@ const ProfileContent = ({ title, pageType }) => {
       <h1>{title}</h1>
       {pageType === "favourites" && <Favourites />}
       {pageType === "cart" && <Cart />}
+      {pageType === "purchases" && <Purchases />}
     </Content>
   );
 };

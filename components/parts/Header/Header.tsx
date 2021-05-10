@@ -101,16 +101,11 @@ const Header = () => {
                   </li>
                   {user && (
                     <li>
-                      <Link href="#">
+                      <Link href="/profile">
                         <a>My Profile</a>
                       </Link>
                     </li>
                   )}
-                  <li>
-                    <Link href="#">
-                      <a>Customer Service</a>
-                    </Link>
-                  </li>
                   <li
                     style={{ cursor: "pointer" }}
                     onClick={() => onAuthHandler("sign")}
@@ -155,10 +150,10 @@ const Header = () => {
                     onClick={() => onAuthHandler("profile")}
                   >
                     <User
-                      width="20"
-                      height="20"
+                      width="23px"
+                      height="23px"
                       fill={colors.white[100]}
-                      userPhoto={user ? user?.photo : false}
+                      userPhoto={user ? user?.photo : ""}
                     />{" "}
                     My Profile
                   </Button>

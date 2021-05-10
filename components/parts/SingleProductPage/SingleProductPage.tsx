@@ -1,4 +1,4 @@
-import { Heart, HeartFilled, StarFilled, User } from "@/styles/icons";
+import { Heart, HeartFilled, StarFilled, User, Star } from "@/styles/icons";
 import { colors } from "@/styles/theme";
 import styles from "./SingleProductPage.module.css";
 import styled from "styled-components";
@@ -62,7 +62,10 @@ const SingleProductPage = ({ product }) => {
 
   const productRating = useMemo(() => {
     return product?.reviews
-      ? product.reviews.reduce((acc, curr) => acc + +curr.rating, 0)
+      ? (
+          product.reviews.reduce((acc, curr) => acc + curr.rating, 0) /
+          product.reviews.length
+        ).toFixed(1)
       : 0;
   }, [product]);
 
@@ -94,6 +97,8 @@ const SingleProductPage = ({ product }) => {
 
   useEffect(() => {
     if (product && Object.keys(product).length > 0) {
+      setIsProductsLoading(false);
+    } else if (product === null) {
       setIsProductsLoading(false);
     }
   }, [product]);
@@ -128,287 +133,327 @@ const SingleProductPage = ({ product }) => {
   return (
     <div className="st_main_section">
       <div className="container">
-        <h1
-          className={styles.product__title}
-          style={{ color: colors.black[100] }}
-        >
-          {isProductsLoading ? (
-            <Skeleton
-              width="100%"
-              height="36px"
-              number={2}
-              bgColor={colors.black[80]}
-              fullwidth
-            />
-          ) : (
-            <ProductTitle wordCount={0}>{product.title}</ProductTitle>
-          )}
-        </h1>
-        <div className={styles.product__container}>
-          <div
-            className={styles.product__images}
-            style={{ borderColor: colors.black[50] }}
+        {!isProductsLoading && !product ? (
+          <p
+            style={{
+              textAlign: "center",
+              color: colors.black[80],
+              fontWeight: 500,
+            }}
           >
-            {isProductsLoading ? (
-              <Skeleton
-                width="100%"
-                height="400px"
-                number={12}
-                bgColor={colors.black[80]}
-                fullwidth
-              />
-            ) : (
-              <>
-                {product.condition.length > 0 && (
-                  <div className={styles.product__images_badge}>
-                    <Badge>{product.condition[0]}</Badge>
-                  </div>
-                )}
-                <IconButton
-                  name="Favourite"
-                  size="lg"
-                  bgColor={colors.cyan[90]}
-                  onClick={onUpdateFav}
-                >
-                  {isFav ? (
-                    <HeartFilled
-                      fill={colors.white[100]}
-                      width="19"
-                      height="17"
-                    />
-                  ) : (
-                    <Heart fill={colors.white[100]} width="19" height="17" />
-                  )}
-                </IconButton>
-                <Carousel
-                  isRTL={false}
-                  showArrows={false}
-                  renderPagination={(props) => (
-                    <ImageCarouselPagination
-                      images={product.images}
-                      {...props}
-                      styles={styles}
-                    />
-                  )}
-                  className={styles.product__images_carousel}
-                >
-                  {product.images.map((image, index) => (
-                    <ImageItemCarousel
-                      key={index}
-                      onDragStart={(e) => e.preventDefault()}
-                    >
-                      <Image
-                        src={image}
-                        alt={product.title}
-                        layout="fill"
-                        objectFit="contain"
-                      />
-                    </ImageItemCarousel>
-                  )) || <div></div>}
-                </Carousel>
-              </>
-            )}
-          </div>
-          <div className={styles.product__details}>
-            <h2 className={styles.product__subtitle}>Details</h2>
-            {isProductsLoading ? (
-              <Skeleton
-                width="100%"
-                height="200px"
-                number={6}
-                bgColor={colors.black[80]}
-                fullwidth
-              />
-            ) : (
-              <div className={styles.product__details_content}>
-                {product.details.map((detail) => (
-                  <div key={detail.id}>
-                    <span style={{ color: colors.black[85] }}>
-                      {detail.key}
-                    </span>
-                    <span style={{ color: colors.black[90] }}>
-                      {detail.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className={styles.product__description}>
-            <h2 className={styles.product__subtitle}>Description</h2>
-            {isProductsLoading ? (
-              <Skeleton
-                width="100%"
-                height="200px"
-                number={6}
-                bgColor={colors.black[80]}
-                fullwidth
-              />
-            ) : (
-              <p style={{ color: colors.black[85] }}>{product.description}</p>
-            )}
-          </div>
-          <div className={styles.product__reviews}>
-            <h2 className={styles.product__subtitle}>Reviews</h2>
-            {isProductsLoading ? (
-              <Skeleton
-                width="100%"
-                height="200px"
-                number={6}
-                bgColor={colors.black[80]}
-                fullwidth
-              />
-            ) : (
-              <div className={styles.product_reviews__content}>
-                {product.reviews.length === 0 ? (
-                  <p style={{ color: colors.black[80] }}>No reviews yet.</p>
-                ) : (
-                  product.reviews.map((review) => (
-                    <div
-                      className={styles.product_reviews__single}
-                      key={review.id}
-                    >
-                      <p style={{ color: colors.black[100] }}>
-                        {review.reviewer}
-                        <span className={styles.product_reviews__single_rating}>
-                          {new Array(review.rating)
-                            .fill(review.rating)
-                            .map((_, index) => (
-                              <StarFilled
-                                key={index}
-                                height="15"
-                                width="15"
-                                fill={colors.yellow[90]}
-                              />
-                            ))}
-                        </span>
-                      </p>
-                      <p style={{ color: colors.black[85] }}>{review.review}</p>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-          <div className={styles.product__sidebar}>
-            <SidebarBox>
+            Sorry we can't find your requested product.
+          </p>
+        ) : (
+          <>
+            <h1
+              className={styles.product__title}
+              style={{ color: colors.black[100] }}
+            >
               {isProductsLoading ? (
                 <Skeleton
                   width="100%"
-                  height="140px"
-                  number={5}
+                  height="36px"
+                  number={2}
                   bgColor={colors.black[80]}
                   fullwidth
                 />
               ) : (
-                <>
-                  <div className={styles.product__price_box_header}>
-                    <p
-                      style={{
-                        color: product.salePrice
-                          ? colors.black[70]
-                          : colors.violet[100],
-                      }}
+                <ProductTitle wordCount={0}>{product.title}</ProductTitle>
+              )}
+            </h1>
+            <div className={styles.product__container}>
+              <div
+                className={styles.product__images}
+                style={{ borderColor: colors.black[50] }}
+              >
+                {isProductsLoading ? (
+                  <Skeleton
+                    width="100%"
+                    height="400px"
+                    number={12}
+                    bgColor={colors.black[80]}
+                    fullwidth
+                  />
+                ) : (
+                  <>
+                    {product.condition.length > 0 && (
+                      <div className={styles.product__images_badge}>
+                        <Badge>{product.condition[0]}</Badge>
+                      </div>
+                    )}
+                    <IconButton
+                      name="Favourite"
+                      size="lg"
+                      bgColor={colors.cyan[90]}
+                      onClick={onUpdateFav}
                     >
-                      {product.salePrice && (
-                        <span
-                          style={{
-                            color: product.salePrice
-                              ? colors.violet[100]
-                              : colors.black[70],
-                          }}
-                        >
-                          ${product.salePrice}
-                        </span>
-                      )}
-                      <b>${product.price}</b>
-                    </p>
-                    <span style={{ color: colors.black[80] }}>
-                      {productRating}/5
-                      <span className={styles.product_reviews__single_rating}>
-                        <StarFilled
-                          height="13"
-                          width="13"
-                          fill={colors.yellow[90]}
+                      {isFav ? (
+                        <HeartFilled
+                          fill={colors.white[100]}
+                          width="19"
+                          height="17"
                         />
-                      </span>
-                    </span>
+                      ) : (
+                        <Heart
+                          fill={colors.white[100]}
+                          width="19"
+                          height="17"
+                        />
+                      )}
+                    </IconButton>
+                    <Carousel
+                      isRTL={false}
+                      showArrows={false}
+                      renderPagination={(props) => (
+                        <ImageCarouselPagination
+                          images={product.images}
+                          {...props}
+                          styles={styles}
+                        />
+                      )}
+                      className={styles.product__images_carousel}
+                    >
+                      {product.images.map((image, index) => (
+                        <ImageItemCarousel
+                          key={index}
+                          onDragStart={(e) => e.preventDefault()}
+                        >
+                          <Image
+                            src={image}
+                            alt={product.title}
+                            layout="fill"
+                            objectFit="contain"
+                          />
+                        </ImageItemCarousel>
+                      )) || <div></div>}
+                    </Carousel>
+                  </>
+                )}
+              </div>
+              <div className={styles.product__details}>
+                <h2 className={styles.product__subtitle}>Details</h2>
+                {isProductsLoading ? (
+                  <Skeleton
+                    width="100%"
+                    height="200px"
+                    number={6}
+                    bgColor={colors.black[80]}
+                    fullwidth
+                  />
+                ) : (
+                  <div className={styles.product__details_content}>
+                    {product.details.map((detail) => (
+                      <div key={detail.id}>
+                        <span style={{ color: colors.black[85] }}>
+                          {detail.key}
+                        </span>
+                        <span style={{ color: colors.black[90] }}>
+                          {detail.value}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div className={styles.product__sidebar_box_cta}>
-                    {isAddedToCart ? (
-                      <Button
-                        name="Checkout"
-                        width="100%"
-                        size="lg"
-                        bgColor={colors.cyan[90]}
-                        color={colors.white[100]}
-                        mt="20px"
-                        link
-                        href="/profile/cart"
-                      >
-                        Go checkout
-                      </Button>
+                )}
+              </div>
+              <div className={styles.product__description}>
+                <h2 className={styles.product__subtitle}>Description</h2>
+                {isProductsLoading ? (
+                  <Skeleton
+                    width="100%"
+                    height="200px"
+                    number={6}
+                    bgColor={colors.black[80]}
+                    fullwidth
+                  />
+                ) : (
+                  <p style={{ color: colors.black[85] }}>
+                    {product.description}
+                  </p>
+                )}
+              </div>
+              <div className={styles.product__reviews}>
+                <h2 className={styles.product__subtitle}>Reviews</h2>
+                {isProductsLoading ? (
+                  <Skeleton
+                    width="100%"
+                    height="200px"
+                    number={6}
+                    bgColor={colors.black[80]}
+                    fullwidth
+                  />
+                ) : (
+                  <div className={styles.product_reviews__content}>
+                    {product.reviews.length === 0 ? (
+                      <p style={{ color: colors.black[80] }}>No reviews yet.</p>
                     ) : (
-                      <Button
-                        name="Add To Cart"
-                        width="100%"
-                        size="lg"
-                        bgColor={colors.cyan[90]}
-                        color={colors.white[100]}
-                        mt="20px"
-                        onClick={onAddToCartHandler}
-                      >
-                        Add to Cart
-                      </Button>
+                      product.reviews.map((review) => (
+                        <div
+                          className={styles.product_reviews__single}
+                          key={review.id}
+                        >
+                          <p style={{ color: colors.black[100] }}>
+                            {review.reviewer}
+                            <span
+                              className={styles.product_reviews__single_rating}
+                            >
+                              {new Array(review.rating)
+                                .fill(review.rating)
+                                .map((_, index) => (
+                                  <StarFilled
+                                    key={index}
+                                    height="15"
+                                    width="15"
+                                    fill={colors.yellow[90]}
+                                  />
+                                ))}
+                              {review.rating < 5 &&
+                                new Array(5)
+                                  .fill(review.rating)
+                                  .map(
+                                    (_, index) =>
+                                      index > review.rating - 1 && (
+                                        <Star
+                                          key={index}
+                                          height="15"
+                                          width="15"
+                                          fill={colors.yellow[90]}
+                                        />
+                                      )
+                                  )}
+                            </span>
+                          </p>
+                          <p style={{ color: colors.black[85] }}>
+                            {review.review}
+                          </p>
+                        </div>
+                      ))
                     )}
                   </div>
-                </>
-              )}
-            </SidebarBox>
-            <SidebarBox>
-              {isProductsLoading ? (
-                <Skeleton
-                  width="100%"
-                  height="140px"
-                  number={5}
-                  bgColor={colors.black[80]}
-                  fullwidth
-                />
-              ) : (
-                <>
-                  <div className={styles.product__retailer_box_header}>
-                    <div className={styles.product__retailer_box_image}>
-                      <User
-                        width="45px"
-                        height="45px"
-                        fill={colors.black[60]}
-                        userPhoto={product.retailer.image}
-                      />
-                    </div>
-                    <div
-                      className={styles.product__retailer_box_title}
-                      style={{ color: colors.black[100] }}
-                    >
-                      {product.retailer.name}
-                    </div>
-                  </div>
-                  <div className={styles.product__sidebar_box_cta}>
-                    <Button
-                      name="Retailer Profile"
-                      size="lg"
-                      bgColor={colors.cyan[50]}
-                      color={colors.cyan[90]}
-                      mt="20px"
+                )}
+              </div>
+              <div className={styles.product__sidebar}>
+                <SidebarBox>
+                  {isProductsLoading ? (
+                    <Skeleton
                       width="100%"
-                    >
-                      Show Profile
-                    </Button>
-                  </div>
-                </>
-              )}
-            </SidebarBox>
-          </div>
-        </div>
+                      height="140px"
+                      number={5}
+                      bgColor={colors.black[80]}
+                      fullwidth
+                    />
+                  ) : (
+                    <>
+                      <div className={styles.product__price_box_header}>
+                        <p
+                          style={{
+                            color: product.salePrice
+                              ? colors.black[70]
+                              : colors.violet[100],
+                          }}
+                        >
+                          {product.salePrice && (
+                            <span
+                              style={{
+                                color: product.salePrice
+                                  ? colors.violet[100]
+                                  : colors.black[70],
+                              }}
+                            >
+                              ${product.salePrice}
+                            </span>
+                          )}
+                          <b>${product.price}</b>
+                        </p>
+                        <span style={{ color: colors.black[80] }}>
+                          {productRating}/5
+                          <span
+                            className={styles.product_reviews__single_rating}
+                          >
+                            <StarFilled
+                              height="13"
+                              width="13"
+                              fill={colors.yellow[90]}
+                            />
+                          </span>
+                        </span>
+                      </div>
+                      <div className={styles.product__sidebar_box_cta}>
+                        {isAddedToCart ? (
+                          <Button
+                            name="Checkout"
+                            width="100%"
+                            size="lg"
+                            bgColor={colors.cyan[90]}
+                            color={colors.white[100]}
+                            mt="20px"
+                            link
+                            href="/profile/cart"
+                          >
+                            Go Checkout
+                          </Button>
+                        ) : (
+                          <Button
+                            name="Add To Cart"
+                            width="100%"
+                            size="lg"
+                            bgColor={colors.cyan[90]}
+                            color={colors.white[100]}
+                            mt="20px"
+                            onClick={onAddToCartHandler}
+                          >
+                            Add to Cart
+                          </Button>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </SidebarBox>
+                <SidebarBox>
+                  {isProductsLoading ? (
+                    <Skeleton
+                      width="100%"
+                      height="140px"
+                      number={5}
+                      bgColor={colors.black[80]}
+                      fullwidth
+                    />
+                  ) : (
+                    <>
+                      <div className={styles.product__retailer_box_header}>
+                        <div className={styles.product__retailer_box_image}>
+                          <User
+                            width="45px"
+                            height="45px"
+                            fill={colors.black[60]}
+                            userPhoto="https://firebasestorage.googleapis.com/v0/b/stockary-1f5ea.appspot.com/o/images%2Flogo.png?alt=media&token=30f04a0d-ead0-4a6d-9f10-ec6d3f462d5c"
+                          />
+                        </div>
+                        <div
+                          className={styles.product__retailer_box_title}
+                          style={{ color: colors.black[100] }}
+                        >
+                          {product.retailer.name}
+                        </div>
+                      </div>
+                      {/* <div className={styles.product__sidebar_box_cta}>
+                        <Button
+                          name="Retailer Profile"
+                          size="lg"
+                          bgColor={colors.cyan[50]}
+                          color={colors.cyan[90]}
+                          mt="20px"
+                          width="100%"
+                        >
+                          Show Profile
+                        </Button>
+                      </div> */}
+                    </>
+                  )}
+                </SidebarBox>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

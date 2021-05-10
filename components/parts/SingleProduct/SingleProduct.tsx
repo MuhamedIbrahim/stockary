@@ -75,26 +75,28 @@ const SingleProduct = ({
                 objectFit="contain"
               />
             ) : (
-              <LogoIcon height="66" fill={colors.black[50]} />
+              <LogoIcon width="70" height="70" fill={colors.black[50]} />
             )}
           </a>
         </Link>
       </div>
       <div className={styles.single_product__info}>
-        <IconButton
-          name="Favourite"
-          size="md"
-          bgColor={cartProduct ? "transparent" : colors.cyan[90]}
-          onClick={cartProduct ? () => onUpdateCart(product.id) : onUpdateFav}
-        >
-          {cartProduct ? (
-            <Close fill={colors.black[80]} width="15px" height="15px" />
-          ) : isFav ? (
-            <HeartFilled fill={colors.white[100]} width="15" height="13" />
-          ) : (
-            <Heart fill={colors.white[100]} width="15" height="13" />
-          )}
-        </IconButton>
+        {!product?.quantity && (
+          <IconButton
+            name="Favourite"
+            size="md"
+            bgColor={cartProduct ? "transparent" : colors.cyan[90]}
+            onClick={cartProduct ? () => onUpdateCart(product.id) : onUpdateFav}
+          >
+            {cartProduct ? (
+              <Close fill={colors.black[80]} width="15px" height="15px" />
+            ) : isFav ? (
+              <HeartFilled fill={colors.white[100]} width="15" height="13" />
+            ) : (
+              <Heart fill={colors.white[100]} width="15" height="13" />
+            )}
+          </IconButton>
+        )}
         <Link
           href={`/products/${cartProduct ? product.productID : product.id}`}
         >
@@ -114,12 +116,22 @@ const SingleProduct = ({
             className={styles.single_product__details}
             style={{ color: colors.black[80] }}
           >
-            {product.details.map((detail) => (
-              <p key={detail.id}>
-                {detail.key}: <strong>{detail.value}</strong>
-              </p>
-            ))}
+            {product.details
+              .filter((_, i) => i < 2)
+              .map((detail) => (
+                <p key={detail.id}>
+                  {detail.key}: <strong>{detail.value}</strong>
+                </p>
+              ))}
           </div>
+        )}
+        {product?.quantity && (
+          <p
+            className={styles.single_product__price}
+            style={{ color: colors.black[90], fontWeight: 500 }}
+          >
+            Quantity: {product.quantity}
+          </p>
         )}
         <p
           className={styles.single_product__price}

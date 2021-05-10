@@ -22,7 +22,7 @@ export type simpleProductProps = {
 type categoryData = {
 id: string
 name: string
-products: string[],
+image: string
 productsNumber: number
 }
 

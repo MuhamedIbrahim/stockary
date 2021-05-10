@@ -6,7 +6,7 @@ import SidebarController, {
 } from "@/components/parts/Profile/SidebarController";
 import ProfileContent from "@/components/parts/Profile/ProfileContent";
 
-const favourites = () => {
+const purchases = () => {
   const { user, isLoading } = useAuth();
   if (isLoading) {
     return (
@@ -21,8 +21,8 @@ const favourites = () => {
     return (
       <div className="container">
         <ProfileContainer>
-          <SidebarController activePage="favourites" userPhoto={user.photo} />
-          <ProfileContent title="Favourites" pageType="favourites" />
+          <SidebarController activePage="purchases" userPhoto={user.photo} />
+          <ProfileContent title="Purchases" pageType="purchases" />
         </ProfileContainer>
       </div>
     );
@@ -32,4 +32,4 @@ const favourites = () => {
   }
 };
 
-export default favourites;
+export default purchases;

@@ -74,8 +74,8 @@ const SidebarController = ({ userPhoto, activePage = "favourites" }) => {
         <p>Muhamed Ibrahim</p>
       </UserCotainer>
       <LinksContainer>
-        <Link href="/profile/purchases">
-          <a className={activePage === "purchases" ? "active" : ""}>
+        {activePage === "purchases" ? (
+          <a className="active">
             <Purchases
               fill={
                 activePage === "purchases" ? colors.cyan[90] : colors.black[100]
@@ -85,42 +85,40 @@ const SidebarController = ({ userPhoto, activePage = "favourites" }) => {
             />
             Purchases
           </a>
-        </Link>
-        <Link href="/profile/favourites">
-          <a className={activePage === "favourites" ? "active" : ""}>
-            <Heart
-              fill={
-                activePage === "favourites"
-                  ? colors.cyan[90]
-                  : colors.black[100]
-              }
-              width="18px"
-              height="18px"
-            />{" "}
+        ) : (
+          <Link href="/profile/purchases">
+            <a>
+              <Purchases fill={colors.black[100]} width="18px" height="18px" />
+              Purchases
+            </a>
+          </Link>
+        )}
+        {activePage === "favourites" ? (
+          <a className="active">
+            <Heart fill={colors.cyan[90]} width="18px" height="18px" />{" "}
             Favourites
           </a>
-        </Link>
-        <Link href="/profile/cart">
-          <a className={activePage === "cart" ? "active" : ""}>
-            <Basket
-              fill={activePage === "cart" ? colors.cyan[90] : colors.black[100]}
-              width="18px"
-              height="18px"
-            />{" "}
-            Cart
+        ) : (
+          <Link href="/profile/favourites">
+            <a>
+              <Heart fill={colors.black[100]} width="18px" height="18px" />{" "}
+              Favourites
+            </a>
+          </Link>
+        )}
+        {activePage === "cart" ? (
+          <a className="active">
+            <Basket fill={colors.cyan[90]} width="18px" height="18px" /> Cart
           </a>
-        </Link>
+        ) : (
+          <Link href="/profile/cart">
+            <a>
+              <Basket fill={colors.black[100]} width="18px" height="18px" />{" "}
+              Cart
+            </a>
+          </Link>
+        )}
       </LinksContainer>
-      <Button
-        name="Upgrade Plan"
-        size="lg"
-        bgColor={colors.cyan[90]}
-        color={colors.white[100]}
-        mt="30px"
-        width="100%"
-      >
-        Upgrade to Sell
-      </Button>
     </Container>
   );
 };

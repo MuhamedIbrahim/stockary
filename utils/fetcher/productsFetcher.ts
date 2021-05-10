@@ -91,11 +91,3 @@ export const getCachedProductsShow = (setState) => {
   const showStyle = localStorage.getItem("stockaryShowStyle");
   setState(JSON.parse(showStyle) || "list");
 }
-
-export const updatePurchasedItems = (ids: string[]) => {
-  ids.forEach(async item => {
-    await db.collection('products').doc(item).update({
-      purchases: firebase.firestore.FieldValue.increment(1)
-    });
-  });
-}

@@ -21,7 +21,7 @@ const cart = () => {
     return (
       <div className="container">
         <ProfileContainer>
-          <SidebarController activePage="cart" />
+          <SidebarController activePage="cart" userPhoto={user.photo} />
           <ProfileContent title="Cart" pageType="cart" />
         </ProfileContainer>
       </div>

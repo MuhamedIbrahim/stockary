@@ -85,9 +85,7 @@ const SubHeader = () => {
                     <a>
                       <div style={{ backgroundColor: colors.cyan[70] }}>
                         <Image
-                          src={`/images/categories/${category.name
-                            .split(" ")
-                            .join("")}.png`}
+                          src={category.image}
                           alt={category.name}
                           width="55"
                           height="55"
@@ -127,7 +125,7 @@ const SubHeader = () => {
                 All Categories
               </li>
               {productsCategories
-                ?.filter((_, index) => index < 7)
+                ?.filter((_, index) => index < 8)
                 .map((category) => (
                   <li key={category.id}>
                     <Link href={`/products?cat=${category.id}`}>

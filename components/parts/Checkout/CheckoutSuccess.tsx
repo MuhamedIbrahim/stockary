@@ -1,11 +1,6 @@
 import { Button } from "@/components/UI/Button/Button";
 import { PurchaseDone } from "@/styles/icons";
 import { colors } from "@/styles/theme";
-import { removeAllProductsCart } from "@/utils/fetcher/cartFetcher";
-import { updatePurchasedItems } from "@/utils/fetcher/productsFetcher";
-import { useAuth } from "@/utils/useAuth";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -19,26 +14,6 @@ const Container = styled.div`
 `;
 
 const CheckoutSuccess = () => {
-  const { query: routerQuery } = useRouter();
-
-  const { user } = useAuth();
-
-  useEffect(() => {
-    if (routerQuery?.id) {
-      if (Array.isArray(routerQuery.id)) {
-        updatePurchasedItems(routerQuery.id);
-      } else {
-        updatePurchasedItems([routerQuery.id]);
-      }
-    }
-  }, [routerQuery]);
-
-  useEffect(() => {
-    if (user?.uid) {
-      removeAllProductsCart(user.uid);
-    }
-  }, [user]);
-
   return (
     <div className="container st_main_section">
       <Container>

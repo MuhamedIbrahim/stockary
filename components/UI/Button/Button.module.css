@@ -22,10 +22,6 @@
   margin-right: 10px !important;
 }
 
-.button > div {
-  border-radius: 50%;
-}
-
 .button--xs {
   height: 30px;
   min-width: 30px;

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./SinglePopularCat.module.css";
 
-const SinglePopularCat = ({ id, name }) => {
+const SinglePopularCat = ({ id, name, image }) => {
   return (
     <div className={styles.single_cat}>
       <div
@@ -17,7 +17,7 @@ const SinglePopularCat = ({ id, name }) => {
           <Link href={`products?cat=${id}`}>
             <a>
               <Image
-                src={`/images/categories/${name.split(" ").join("")}.png`}
+                src={image}
                 alt={name}
                 height="120"
                 width="138"

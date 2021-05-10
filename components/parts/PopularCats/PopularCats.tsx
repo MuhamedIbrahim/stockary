@@ -67,8 +67,13 @@ const PopularCats = () => {
                       },
                     ]}
                   >
-                    {popularCats?.map(({ name, id }) => (
-                      <SinglePopularCat key={id} name={name} id={id} />
+                    {popularCats?.map(({ name, id, image }) => (
+                      <SinglePopularCat
+                        key={id}
+                        name={name}
+                        id={id}
+                        image={image}
+                      />
                     ))}
                   </Carousel>
                 )}

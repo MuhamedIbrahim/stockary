@@ -127,6 +127,10 @@
   margin-top: 7px;
 }
 
+.product_reviews__single:not(:last-child) {
+  margin-bottom: 25px;
+}
+
 .product_reviews__single_rating {
   position: relative;
   top: -2px;
