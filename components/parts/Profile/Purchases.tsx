@@ -60,7 +60,6 @@ const Purchases = () => {
                   images: [product.image],
                 }}
                 favs={[]}
-                mutateFavProducts={() => {}}
                 rowStyle
               />
             ))}

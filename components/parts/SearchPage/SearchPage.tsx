@@ -4,7 +4,6 @@ import fetcher, {
   getCachedProductsShow,
   toggleProductsShow,
 } from "@/utils/fetcher/productsFetcher";
-import favFetcher from "@/utils/fetcher/favsFetcher";
 import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
@@ -13,6 +12,8 @@ import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { colors } from "@/styles/theme";
 import PopularProducts from "../PopularProducts/PopularProducts";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllFavs } from "@/utils/redux/slices/favSlice";
 
 const SearchProducts = styled.div.attrs((props: { showStyle: string }) => ({
   showStyle: props.showStyle,
@@ -42,11 +43,9 @@ const SearchPage = () => {
 
   const [showStyle, setShowStyle] = useState("list");
 
-  const { data: favProducts = [], mutate: mutateFavProducts } = useSWR(
-    "favs",
-    favFetcher,
-    options
-  );
+  const { favs: favProducts = [] } = useSelector(selectAllFavs);
+
+  const dispatch = useDispatch();
 
   const { data: dataProducts = [], isValidating: isLoading } = useSWR(
     query?.s && ["products/search", null, query?.s],
@@ -103,7 +102,7 @@ const SearchPage = () => {
                   key={prod.id}
                   product={prod}
                   favs={favProducts}
-                  mutateFavProducts={mutateFavProducts}
+                  dispatch={dispatch}
                 />
               ))}
             </SearchProducts>

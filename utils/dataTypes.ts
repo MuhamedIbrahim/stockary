@@ -1,5 +1,6 @@
 type simpleProductData = {
-  image: string
+  images?: string[]
+  image?: string
   price: number
   salePrice?: number
   title: string[]
@@ -70,3 +71,16 @@ export type productData = {
 }
 
 export type productDataReturn = productData[] | [];
+
+export type updateFavsParams = {
+  product?: SimpleProduct,
+  state: string,
+  productID: string
+}
+
+export type addProductCartParams = {
+  product: productData,
+  id: string,
+  addedAt: number,
+  uid: string
+}

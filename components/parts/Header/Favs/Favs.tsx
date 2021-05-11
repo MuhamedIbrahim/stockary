@@ -5,20 +5,23 @@ import styles from "./Favs.module.css";
 import Product from "./Product/Product";
 import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
-import useSWR from "swr";
-import fetcher, {
-  onUpdateFavProductsHandler,
-} from "@/utils/fetcher/favsFetcher";
-import options from "@/utils/fetcher/options";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAllFavs,
+  favsFetcher,
+  updateFavs,
+} from "@/utils/redux/slices/favSlice";
 
 const Favs = () => {
   const favMenuRef = useRef(null);
 
-  const { data: favProducts = [], mutate: mutateFavProducts } = useSWR(
-    "favs",
-    fetcher,
-    options
-  );
+  const { favs: favProducts = [] } = useSelector(selectAllFavs);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(favsFetcher());
+  }, []);
 
   const toggleFavMenuHandler = useCallback(() => {
     favMenuRef?.current?.classList.contains(styles["header_favs__menu--active"])
@@ -37,10 +40,12 @@ const Favs = () => {
     }
   }, []);
 
-  const onRemoveProductHandler = useCallback((id) => {
-    onUpdateFavProductsHandler({ id }, "remove", id);
-    mutateFavProducts();
-  }, []);
+  const onRemoveProductHandler = useCallback(
+    (id) => {
+      dispatch(updateFavs({ state: "remove", productID: id }));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     document.addEventListener("click", closeFavMenuHandler);

@@ -3,7 +3,6 @@ import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { filterConditionContent, filterPriceContent } from "@/config";
 import { colors } from "@/styles/theme";
 import catsFetcher from "@/utils/fetcher/categoriesFetcher";
-import favFetcher from "@/utils/fetcher/favsFetcher";
 import options from "@/utils/fetcher/options";
 import prodsFetcher, {
   getCachedProductsShow,
@@ -13,8 +12,10 @@ import {
   cleanFilterString,
   cloneAllProductsFilterState,
 } from "@/utils/generalFunctions";
+import { selectAllFavs } from "@/utils/redux/slices/favSlice";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import ProductsHeader from "../ProductsHeader/ProductsHeader";
 import SingleProduct from "../SingleProduct/SingleProduct";
@@ -37,16 +38,12 @@ const AllProducts = ({
     price: "",
   });
 
-  const { data: favProducts = [], mutate: mutateFavProducts } = useSWR(
-    "favs",
-    favFetcher,
-    options
-  );
+  const { favs: favProducts = [] } = useSelector(selectAllFavs);
 
-  const [lastDocRef = null, setLastDocRef] = useState(null);
+  const dispatch = useDispatch();
 
   const { data: products = [], isValidating: productsLoading } = useSWR(
-    ["products/filter", router.query, "", lastDocRef],
+    ["products/filter", router.query, ""],
     prodsFetcher,
     options
   );
@@ -322,8 +319,8 @@ const AllProducts = ({
                         key={prod.id}
                         product={prod}
                         favs={favProducts}
-                        mutateFavProducts={mutateFavProducts}
                         rowStyle={showStyle === "row"}
+                        dispatch={dispatch}
                       />
                     ))}
                   </div>

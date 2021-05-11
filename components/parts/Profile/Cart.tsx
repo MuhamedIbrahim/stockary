@@ -4,9 +4,11 @@ import { createStripeCheckout } from "@/lib/firebase";
 import { colors } from "@/styles/theme";
 import fetcher from "@/utils/fetcher/cartFetcher";
 import options from "@/utils/fetcher/options";
+import { selectAllCart } from "@/utils/redux/slices/cartSlice";
 import { useAuth } from "@/utils/useAuth";
 import { loadStripe } from "@stripe/stripe-js";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import useSWR from "swr";
 import SingleProduct from "../SingleProduct/SingleProduct";
@@ -27,11 +29,9 @@ const Cart = () => {
 
   const { user } = useAuth();
 
-  const {
-    data: cartProducts = [],
-    mutate: mutateCartProducts,
-    isValidating: isLoading,
-  } = useSWR(user && ["cart/all", user.uid], fetcher, options);
+  const { cart: cartProducts = [], isLoading } = useSelector(selectAllCart);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setOrderQuantities(
@@ -99,11 +99,10 @@ const Cart = () => {
               }}
               rowStyle={true}
               favs={[]}
-              mutateFavProducts={() => {}}
               cartProduct
-              mutateCartProducts={mutateCartProducts}
               updateQuantities={onUpdateQuantitiesHandler}
               userID={user.uid}
+              dispatch={dispatch}
             />
           ))}
           <SubtotalContainer>

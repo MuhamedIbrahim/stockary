@@ -1,24 +1,21 @@
 import { Button } from "@/components/UI/Button/Button";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { colors } from "@/styles/theme";
-import favFetcher from "@/utils/fetcher/favsFetcher";
 import prodFetcher from "@/utils/fetcher/productsFetcher";
 import options from "@/utils/fetcher/options";
 import useSWR from "swr";
 import SingleProduct from "../SingleProduct/SingleProduct";
 import styles from "./PopularProducts.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllFavs } from "@/utils/redux/slices/favSlice";
 
 const PopularProducts = () => {
-  const { data: favProducts = [], mutate: mutateFavProducts } = useSWR(
-    "favs",
-    favFetcher,
-    options
-  );
+  const { favs: favProducts = [] } = useSelector(selectAllFavs);
 
-  const {
-    data: popularProducts = [],
-    isValidating: popularProductsLoading,
-  } = useSWR("products/popular", prodFetcher, options);
+  const dispatch = useDispatch();
+
+  const { data: popularProducts = [], isValidating: popularProductsLoading } =
+    useSWR("products/popular", prodFetcher, options);
 
   return (
     <>
@@ -48,7 +45,7 @@ const PopularProducts = () => {
                       key={prod.id}
                       product={prod}
                       favs={favProducts}
-                      mutateFavProducts={mutateFavProducts}
+                      dispatch={dispatch}
                     />
                   ))}
                 </div>

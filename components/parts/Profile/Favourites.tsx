@@ -1,17 +1,14 @@
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { colors } from "@/styles/theme";
-import fetcher from "@/utils/fetcher/favsFetcher";
-import options from "@/utils/fetcher/options";
-import useSWR from "swr";
+import { selectAllFavs } from "@/utils/redux/slices/favSlice";
+import { useDispatch, useSelector } from "react-redux";
 import SingleProduct from "../SingleProduct/SingleProduct";
 import { ProductsContainer } from "./ProfileContent";
 
 const Favourites = () => {
-  const {
-    data: favProducts = [],
-    mutate: mutateFavProducts,
-    isValidating: isLoading,
-  } = useSWR("favs", fetcher, options);
+  const { favs: favProducts = [], isLoading } = useSelector(selectAllFavs);
+
+  const dispatch = useDispatch();
 
   return (
     <ProductsContainer>
@@ -35,7 +32,7 @@ const Favourites = () => {
               images: [prod.image],
             }}
             favs={favProducts}
-            mutateFavProducts={mutateFavProducts}
+            dispatch={dispatch}
             rowStyle={true}
           />
         ))

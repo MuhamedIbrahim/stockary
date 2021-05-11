@@ -7,18 +7,15 @@ import { Button, IconButton } from "@/components/UI/Button/Button";
 import Carousel from "react-elastic-carousel";
 import Image from "next/image";
 import ImageCarouselPagination from "./ImageCarouselPagination";
-import favFetcher, {
-  onUpdateFavProductsHandler,
-} from "@/utils/fetcher/favsFetcher";
-import options from "@/utils/fetcher/options";
-import useSWR from "swr";
 import { useRouter } from "next/router";
-import cartFetcher, { addProductCart } from "@/utils/fetcher/cartFetcher";
 import Badge from "@/components/UI/Badge/Badge";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { SimpleProduct } from "@/utils/dataTypes";
 import { useAuth } from "@/utils/useAuth";
 import { ProductTitle } from "@/utils/generalComponents";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllFavs, updateFavs } from "@/utils/redux/slices/favSlice";
+import { cartAddProduct, selectAllCart } from "@/utils/redux/slices/cartSlice";
 
 const SidebarBox = styled.div`
   border-radius: 15px;
@@ -54,26 +51,26 @@ const SingleProductPage = ({ product }) => {
 
   const router = useRouter();
 
-  const {
-    data: cartProducts = [],
-    isValidating: isLoadingCart,
-    mutate: mutateCartProducts,
-  } = useSWR(user && ["cart/all", user.uid], cartFetcher, options);
+  const { cart: cartProducts = [], isLoading: isLoadingCart } =
+    useSelector(selectAllCart);
+
+  const { favs: favProducts = [], isLoading: isLoadingFavs } =
+    useSelector(selectAllFavs);
+
+  const dispatch = useDispatch();
 
   const productRating = useMemo(() => {
-    return product?.reviews
-      ? (
-          product.reviews.reduce((acc, curr) => acc + curr.rating, 0) /
-          product.reviews.length
-        ).toFixed(1)
-      : 0;
+    let number = 0;
+    if (product?.reviews) {
+      number =
+        product.reviews.reduce((acc, curr) => acc + curr.rating, 0) /
+          product.reviews.length || 0;
+    }
+    if (number % 1 !== 0) {
+      number = +number.toFixed(1);
+    }
+    return number;
   }, [product]);
-
-  const {
-    data: favProducts = [],
-    isValidating: isLoadingFavs,
-    mutate: mutateFavProducts,
-  } = useSWR("favs", favFetcher, options);
 
   useEffect(() => {
     let flag = false;
@@ -104,31 +101,33 @@ const SingleProductPage = ({ product }) => {
   }, [product]);
 
   const onUpdateFav = useCallback(() => {
-    onUpdateFavProductsHandler(
-      product,
-      isFav ? "remove" : "add",
-      router.query.id
+    dispatch(
+      updateFavs({
+        product,
+        state: isFav ? "remove" : "add",
+        productID: router.query.id as string,
+      })
     );
-    mutateFavProducts();
-  }, [isFav, product, router.query.id]);
+  }, [isFav, product, router.query.id, dispatch]);
 
   const onAddToCartHandler = useCallback(async () => {
     if (!user) {
       await signin();
     } else {
-      let flag = false;
-      cartProducts.forEach((prod) => {
-        if ((prod as SimpleProduct).productID === router.query.id) flag = true;
-      });
-
-      if (!flag) {
+      if (!isFav) {
         const addedAt = Date.now();
-        await addProductCart(product, router.query.id, addedAt, user.uid);
+        dispatch(
+          cartAddProduct({
+            product,
+            id: router.query.id.toString(),
+            addedAt,
+            uid: user.uid,
+          })
+        );
         setIsAddedToCart(true);
-        mutateCartProducts();
       }
     }
-  }, [product, router.query.id, router.reload, cartProducts, user]);
+  }, [isFav, product, router.query.id, router.reload, cartProducts, user]);
 
   return (
     <div className="st_main_section">

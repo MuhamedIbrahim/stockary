@@ -2,24 +2,22 @@ import Badge from "@/components/UI/Badge/Badge";
 import { IconButton } from "@/components/UI/Button/Button";
 import { Close, Heart, HeartFilled, LogoIcon } from "@/styles/icons";
 import { colors } from "@/styles/theme";
-import { SimpleProduct } from "@/utils/dataTypes";
-import { removeProductCart } from "@/utils/fetcher/cartFetcher";
-import { onUpdateFavProductsHandler } from "@/utils/fetcher/favsFetcher";
 import { ProductTitle } from "@/utils/generalComponents";
+import { cartRemoveProduct } from "@/utils/redux/slices/cartSlice";
+import { updateFavs } from "@/utils/redux/slices/favSlice";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import styles from "./SingleProduct.module.css";
 
 const SingleProduct = ({
   favs,
   product,
   rowStyle = false,
-  mutateFavProducts = null,
   cartProduct = false,
-  mutateCartProducts = null,
   updateQuantities = null,
   userID = "",
+  dispatch = null,
 }) => {
   const [isFav, setIsFav] = useState(false);
 
@@ -32,19 +30,21 @@ const SingleProduct = ({
   }, [favs, product.id]);
 
   const onUpdateFav = useCallback(() => {
-    onUpdateFavProductsHandler(product, isFav ? "remove" : "add", product.id);
-    mutateFavProducts();
-  }, [isFav, product]);
+    dispatch(
+      updateFavs({
+        product,
+        state: isFav ? "remove" : "add",
+        productID: product.id,
+      })
+    );
+  }, [isFav, product, dispatch]);
 
-  const onUpdateCart = useCallback((id) => {
-    mutateCartProducts(async (currentCartProducts) => {
-      const updatedCartProducts = currentCartProducts.filter((cartProd) => {
-        return (cartProd as SimpleProduct).id !== id;
-      });
-      await removeProductCart(id, userID);
-      return updatedCartProducts;
-    });
-  }, []);
+  const onUpdateCart = useCallback(
+    (id) => {
+      dispatch(cartRemoveProduct({ cartProdID: id, uid: userID }));
+    },
+    [dispatch, userID]
+  );
 
   return (
     <div
@@ -170,4 +170,4 @@ const SingleProduct = ({
   );
 };
 
-export default SingleProduct;
+export default memo(SingleProduct);

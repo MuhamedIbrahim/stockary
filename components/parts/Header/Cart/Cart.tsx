@@ -2,32 +2,29 @@ import { Button, IconButton } from "@/components/UI/Button/Button";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { Arrow, Basket, BasketFilled } from "@/styles/icons";
 import { colors } from "@/styles/theme";
-import { SimpleProduct } from "@/utils/dataTypes";
-import fetcher, { removeProductCart } from "@/utils/fetcher/cartFetcher";
-import swrOptions from "@/utils/fetcher/options";
+import {
+  cartFetcher,
+  cartRemoveProduct,
+  selectAllCart,
+} from "@/utils/redux/slices/cartSlice";
 import { useAuth } from "@/utils/useAuth";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import useSWR from "swr";
+import { useDispatch, useSelector } from "react-redux";
 import Product from "../Favs/Product/Product";
 import styles from "./Cart.module.css";
 
 const Cart = () => {
-  const [mobileDeviceOn, setMobileDeviceOn] = useState(true);
-
   const cartMenuRef = useRef(null);
+
+  const [mobileDeviceOn, setMobileDeviceOn] = useState(true);
 
   const { user } = useAuth();
 
-  const {
-    data: cartProducts = [],
-    mutate: mutateCartProducts,
-    isValidating: cartLoading,
-  } = useSWR(
-    !mobileDeviceOn && user && ["cart/all", user.uid],
-    fetcher,
-    swrOptions
-  );
+  const { cart: cartProducts = [], isLoading: cartLoading } =
+    useSelector(selectAllCart);
+
+  const dispatch = useDispatch();
 
   const toggleCartMenuHandler = useCallback(() => {
     cartMenuRef?.current?.classList.contains(
@@ -54,18 +51,18 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
-    window.innerWidth > 993 && setMobileDeviceOn(false);
-  }, []);
+    if (window.innerWidth > 993) {
+      setMobileDeviceOn(false);
+    }
+    dispatch(cartFetcher(user.uid));
+  }, [user]);
 
-  const onRemoveProductHandler = useCallback((id) => {
-    mutateCartProducts(async (currentCartProducts) => {
-      const updatedCartProducts = currentCartProducts.filter((cartProd) => {
-        return (cartProd as SimpleProduct).id !== id;
-      });
-      await removeProductCart(id, user.uid);
-      return updatedCartProducts;
-    });
-  }, []);
+  const onRemoveProductHandler = useCallback(
+    (id) => {
+      dispatch(cartRemoveProduct({ cartProdID: id, uid: user.uid }));
+    },
+    [dispatch]
+  );
 
   return (
     <div className={styles.header_cart}>
