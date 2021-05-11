@@ -359,10 +359,10 @@ const SingleProductPage = ({ product }) => {
                                   : colors.black[70],
                               }}
                             >
-                              ${product.salePrice}
+                              ${product.salePrice.toFixed(2)}
                             </span>
                           )}
-                          <b>${product.price}</b>
+                          <b>${product.price.toFixed(2)}</b>
                         </p>
                         <span style={{ color: colors.black[80] }}>
                           {productRating}/5

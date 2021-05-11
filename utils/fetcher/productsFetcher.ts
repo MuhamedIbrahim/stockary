@@ -1,5 +1,4 @@
-import firebase from 'firebase/app';
-import { db, auth } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import {popularProducts} from "stockary_config";
 import { productDataReturn, productsFetcherParams } from "../dataTypes";
 import {restoreFilterString, restructureProductsReturnedData} from '../generalFunctions';
@@ -46,7 +45,7 @@ const fetcher = async (...[key, filter, searchQuery = '']: productsFetcherParams
     }
     
     await fetchRef
-    .limit(12)
+    .limit(24)
     .get()
     .then(snap => {
       const docs = [];

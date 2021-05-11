@@ -147,10 +147,10 @@ const SingleProduct = ({
                   : colors.black[70],
               }}
             >
-              ${product.salePrice}
+              ${product.salePrice.toFixed(2)}
             </span>
           )}
-          <b>${product.price}</b>
+          <b>${product.price.toFixed(2)}</b>
         </p>
         {cartProduct && (
           <div className={styles.order_input}>

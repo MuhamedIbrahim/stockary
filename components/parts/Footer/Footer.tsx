@@ -23,12 +23,6 @@ const Footer = () => {
                 </Link>
               </div>
               <div className={styles.footer__text}>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do.
-                </p>
-              </div>
-              <div className={styles.footer__text}>
                 <ul className={styles.footer__social}>
                   <li>
                     <IconButton
@@ -120,7 +114,12 @@ const Footer = () => {
             </div>
             <div className={styles.footer__section}>
               <div className={styles.footer__heading}>Stay Informed</div>
-              <div className={styles.footer__text}></div>
+              <div className={styles.footer__text}>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do.
+                </p>
+              </div>
             </div>
           </div>
         </div>

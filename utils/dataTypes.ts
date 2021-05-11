@@ -29,9 +29,10 @@ productsNumber: number
 export type arrayOfCategoriesReturn = categoryData[] | [] ;
 
 type productsQuery = {
-  cat: string[]
-  cond: string[]
-  price: string
+  cat?: string[]
+  cond?: string[]
+  price?: string,
+  page?: string
 }
 
 export type productsFetcherParams = [
@@ -68,4 +69,4 @@ export type productData = {
   title: string[]
 }
 
-export type productDataReturn = productData[] | []
+export type productDataReturn = productData[] | [];

@@ -43,8 +43,10 @@ const AllProducts = ({
     options
   );
 
+  const [lastDocRef = null, setLastDocRef] = useState(null);
+
   const { data: products = [], isValidating: productsLoading } = useSWR(
-    ["products/filter", router.query],
+    ["products/filter", router.query, "", lastDocRef],
     prodsFetcher,
     options
   );
@@ -324,16 +326,6 @@ const AllProducts = ({
                         rowStyle={showStyle === "row"}
                       />
                     ))}
-                  </div>
-                  <div className={styles.all_products__cta}>
-                    <Button
-                      name="Load Products"
-                      size="lg"
-                      bgColor={colors.blue[100]}
-                      color={colors.white[100]}
-                    >
-                      Load More
-                    </Button>
                   </div>
                 </>
               )}

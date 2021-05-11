@@ -25,7 +25,7 @@ const BottomFooter = () => {
             </ul>
           </div>
           <div>
-            <span>Copyright © 2021</span>
+            <span>Copyright © {new Date().getFullYear()}</span>
           </div>
         </div>
       </div>
