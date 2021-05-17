@@ -75,7 +75,7 @@ const Cart = () => {
           ml="15px"
           onClick={toggleCartMenuHandler}
           link={mobileDeviceOn}
-          href="/cart"
+          href="/profile/cart"
         >
           {cartProducts?.length > 0 ? (
             <BasketFilled fill={colors.white[100]} width="20" height="20" />

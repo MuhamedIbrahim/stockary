@@ -17,8 +17,8 @@ exports.createStripeCheckout = functions.https.onCall(async (data, context) => {
       }
     )),
     mode: "payment",
-    success_url: "http://localhost:3000/checkout-success",
-    cancel_url: "http://localhost:3000/profile/cart",
+    success_url: "https://stockary.vercel.app/checkout-success",
+    cancel_url: "https://stockary.vercel.app/profile/cart",
   }).then((res) => {
     data[0].forEach((item) => {
       admin.firestore().collection("products").doc(item.id).update({

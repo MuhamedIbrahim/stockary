@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useAuth } from "@/utils/useAuth";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { colors } from "@/styles/theme";
@@ -10,25 +11,41 @@ const cart = () => {
   const { user, isLoading, redirect } = useAuth();
   if (isLoading) {
     return (
-      <Skeleton
-        number={10}
-        width="100%"
-        height="600px"
-        bgColor={colors.white[80]}
-      />
+      <>
+        <Head>
+          <title>Stockary - My Cart</title>
+        </Head>
+
+        <Skeleton
+          number={10}
+          width="100%"
+          height="600px"
+          bgColor={colors.white[80]}
+        />
+      </>
     );
   } else if (!isLoading && user) {
     return (
-      <div className="container">
-        <ProfileContainer>
-          <SidebarController activePage="cart" userPhoto={user.photo} />
-          <ProfileContent title="Cart" pageType="cart" />
-        </ProfileContainer>
-      </div>
+      <>
+        <Head>
+          <title>Stockary - My Cart</title>
+        </Head>
+
+        <div className="container">
+          <ProfileContainer>
+            <SidebarController activePage="cart" userPhoto={user.photo} />
+            <ProfileContent title="Cart" pageType="cart" />
+          </ProfileContainer>
+        </div>
+      </>
     );
   } else {
     redirect("/");
-    return <></>;
+    return (
+      <Head>
+        <title>Stockary - My Cart</title>
+      </Head>
+    );
   }
 };
 

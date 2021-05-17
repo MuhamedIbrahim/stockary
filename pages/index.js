@@ -1,3 +1,4 @@
+import Head from "next/head";
 import FeaturedProds from "@/components/parts/FeaturedProds/FeaturedProds";
 import PopularCats from "@/components/parts/PopularCats/PopularCats";
 import ProductAd from "@/components/parts/ProductAd/ProductAd";
@@ -7,6 +8,9 @@ import { colors } from "@/styles/theme";
 const index = () => {
   return (
     <>
+      <Head>
+        <title>Stockary</title>
+      </Head>
       <FeaturedProds />
       <PopularCats />
       <ProductAd rowStyle adID="7gT6udQwj1CKO9lxS9bK63" />

@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useAuth } from "@/utils/useAuth";
 import Skeleton from "@/components/UI/Skeleton/Skeleton";
 import { colors } from "@/styles/theme";
@@ -10,25 +11,39 @@ const purchases = () => {
   const { user, isLoading } = useAuth();
   if (isLoading) {
     return (
-      <Skeleton
-        number={10}
-        width="100%"
-        height="600px"
-        bgColor={colors.white[80]}
-      />
+      <>
+        <Head>
+          <title>Stockary - My Purchases</title>
+        </Head>
+        <Skeleton
+          number={10}
+          width="100%"
+          height="600px"
+          bgColor={colors.white[80]}
+        />
+      </>
     );
   } else if (!isLoading && user) {
     return (
-      <div className="container">
-        <ProfileContainer>
-          <SidebarController activePage="purchases" userPhoto={user.photo} />
-          <ProfileContent title="Purchases" pageType="purchases" />
-        </ProfileContainer>
-      </div>
+      <>
+        <Head>
+          <title>Stockary - My Purchases</title>
+        </Head>
+        <div className="container">
+          <ProfileContainer>
+            <SidebarController activePage="purchases" userPhoto={user.photo} />
+            <ProfileContent title="Purchases" pageType="purchases" />
+          </ProfileContainer>
+        </div>
+      </>
     );
   } else {
     redirect("/");
-    return <></>;
+    return (
+      <Head>
+        <title>Stockary - My Purchases</title>
+      </Head>
+    );
   }
 };
 

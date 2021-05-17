@@ -1,8 +1,16 @@
+import Head from "next/head";
 import productsfetcher from "@/utils/fetcher/productsFetcher";
 import SingleProductPage from "@/components/parts/SingleProductPage/SingleProductPage";
 
 const productPage = ({ product }) => {
-  return <SingleProductPage product={product} />;
+  return (
+    <>
+      <Head>
+        <title>Stockary - {product?.title?.join(" ")}</title>
+      </Head>
+      <SingleProductPage product={product} />
+    </>
+  );
 };
 
 export const getStaticProps = async ({ params }) => {
